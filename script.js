@@ -495,7 +495,7 @@ function updateLoginFields(){
  document.getElementById("loginPassword").required=!isStudent;
  document.getElementById("usernameLabel").textContent=isStudent?"Nama lengkap":"Nama guru";
  document.getElementById("loginUsername").placeholder=isStudent?"Masukkan nama lengkap siswa":"Farhan Desri Yanto";
- document.getElementById("loginHint").textContent=isStudent?"Siswa cukup memasukkan nama lengkap dan nomor absen.":"Login guru: Farhan Desri Yanto / 051202.";
+ document.getElementById("loginHint").textContent=isStudent?"Siswa cukup memasukkan nama lengkap dan nomor absen.":"Masukkan kredensial guru untuk melanjutkan.";
 }
 document.getElementById("loginRole").onchange=updateLoginFields;
 document.getElementById("loginForm").onsubmit=e=>{
