@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="SCRIPT LAB - Laboratorium Digital Penulisan Naskah untuk Broadcasting dan Perfilman.">
+<title>SCRIPT LAB | Broadcasting × Film × Education</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="locked">
+<div class="noise"></div>
+<div class="auth-screen" id="authScreen">
+  <div class="auth-card">
+    <p class="eyebrow">SCRIPT LAB / RUANG BELAJAR</p>
+    <h1>Masuk ke<br><em>ruangmu.</em></h1>
+    <p class="auth-lead">Siswa menyusun naskah. Guru memantau hasil kerja dari satu dashboard.</p>
+    <form id="loginForm">
+      <label for="loginRole">Masuk sebagai</label>
+      <select id="loginRole"><option value="student">Siswa</option><option value="teacher">Guru</option></select>
+      <label for="loginUsername" id="usernameLabel">Nama lengkap</label>
+      <input id="loginUsername" required autocomplete="name" placeholder="Masukkan nama lengkap siswa">
+      <div id="absenceField">
+        <label for="loginAbsence">Nomor absen</label>
+        <input id="loginAbsence" type="number" min="1" max="99" placeholder="Contoh: 12">
+      </div>
+      <div id="passwordField">
+        <label for="loginPassword">Password</label>
+        <input id="loginPassword" type="password" autocomplete="current-password" placeholder="Masukkan password guru">
+      </div>
+      <button class="primary-btn auth-submit" type="submit">Masuk <span>→</span></button>
+      <p class="login-hint" id="loginHint">Siswa cukup memasukkan nama lengkap dan nomor absen.</p>
+      <p class="login-error" id="loginError" role="alert"></p>
+    </form>
+  </div>
+</div>
+<header class="topbar" id="appHeader">
+  <a class="brand" href="#home"><span class="brand-mark">SL</span><span>SCRIPT LAB</span></a>
+  <nav>
+    <a href="#home">Home</a><a href="#journey">Journey</a><a href="#workspace">Workspace</a><a href="#teacher">Teacher</a>
+  </nav>
+  <div class="session-actions"><span id="sessionLabel"></span><button class="ghost-btn" id="logoutBtn">Keluar</button><button class="ghost-btn" id="resetBtn">Reset Data</button></div>
+</header>
+
+<main>
+<section id="home" class="hero section">
+  <div class="hero-copy">
+    <p class="eyebrow">BROADCASTING × FILM × EDUCATION</p>
+    <h1>Write it.<br><em>Visualize it.</em><br>Produce it.</h1>
+    <p class="lead">Laboratorium digital penulisan naskah untuk membantu siswa bergerak dari ide, struktur cerita, hingga naskah yang siap diproduksi.</p>
+    <div class="actions"><a class="primary-btn" href="#journey">Mulai Script Journey <span>→</span></a><button class="secondary-btn" id="exportTop">Export Progress</button></div>
+  </div>
+  <div class="hero-card">
+    <div class="screen-top"><span></span><span></span><span></span><b>LIVE WRITING ROOM</b></div>
+    <div class="mini-scene">
+      <span class="scene-tag">INT. KELAS — PAGI</span>
+      <p>Seorang siswa menatap layar laptop. Kursor berkedip.</p>
+      <p class="muted">Apa yang akan terjadi berikutnya?</p>
+    </div>
+    <div class="progress-ring"><strong id="heroPercent">0%</strong><small>progress</small></div>
+  </div>
+</section>
+
+<section id="journey" class="section">
+  <div class="section-heading"><div><p class="eyebrow">01 / SCRIPT JOURNEY</p><h2>Dari format televisi<br>menuju screenplay.</h2></div><p class="section-note">Selesaikan tahap demi tahap. Setiap karya tersimpan otomatis di browser perangkat ini.</p></div>
+  <div class="archive-layout">
+    <div id="journeyGrid" class="journey-grid"></div>
+    <div id="formatDetail" class="format-detail" aria-live="polite"></div>
+  </div>
+</section>
+
+<div id="archiveModal" class="archive-modal hidden" aria-hidden="true">
+  <div class="archive-backdrop" data-close="archive"></div>
+  <div class="archive-panel" role="dialog" aria-modal="true" aria-labelledby="archiveTitle">
+    <button class="archive-close" type="button" aria-label="Tutup arsip">×</button>
+    <div class="archive-doc">
+      <div class="archive-topbar">
+        <div class="archive-window-controls">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="archive-meta">
+          <span class="archive-folder">Naskah</span>
+          <strong id="archiveTitle">Naskah Berita</strong>
+        </div>
+      </div>
+
+      <div class="archive-content">
+        <div class="archive-intro">
+          <p class="archive-kicker">Script Archive</p>
+          <h3 id="archiveHeading">Naskah Berita</h3>
+          <p>Contoh struktur naskah yang bisa Anda kembangkan sesuai kebutuhan.</p>
+        </div>
+
+        <textarea id="archiveEditor" class="archive-editor" spellcheck="false" aria-label="Editor naskah arsip"></textarea>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section id="workspace" class="section workspace-section">
+  <div class="section-heading"><div><p class="eyebrow">02 / WRITING ROOM</p><h2>Bangun naskahmu.</h2></div><div><p class="section-note">Pilih tahap, jawab pertanyaan, lalu gunakan feedback untuk melakukan revisi.</p><div id="studentProgress" class="student-progress" aria-live="polite"></div></div></div>
+  <div class="workspace">
+    <aside class="stage-list" id="stageList"></aside>
+    <div class="editor">
+      <div class="editor-head"><div><span class="stage-number" id="stageNumber">01</span><div><h3 id="stageTitle">Ide Cerita</h3><p id="stageDesc"></p></div></div><span class="save-status" id="saveStatus">● Tersimpan</span></div>
+      <div id="formArea"></div>
+      <div class="feedback" id="feedback"></div>
+      <div class="editor-actions"><button class="secondary-btn" id="prevBtn">← Sebelumnya</button><button class="primary-btn" id="nextBtn">Simpan & Lanjut →</button></div>
+    </div>
+  </div>
+</section>
+
+<section id="challenge" class="section challenge-section">
+  <div class="challenge-box">
+    <div><p class="eyebrow">03 / PRODUCER CHALLENGE</p><h2>Bisakah naskahmu<br>diproduksi?</h2><p>Uji cerita dengan keterbatasan produksi. Pilih tantangan dan sesuaikan naskahmu.</p></div>
+    <div class="challenge-controls">
+      <button class="challenge-btn" id="challengeBtn">🎬 Buat Tantangan</button>
+      <div id="challengeResult" class="challenge-result">Belum ada tantangan.</div>
+    </div>
+  </div>
+</section>
+
+<section id="teacher" class="section teacher-section">
+  <div class="section-heading"><div><p class="eyebrow">04 / TEACHER DASHBOARD</p><h2>Progress kelas.</h2></div><p class="section-note">Dashboard lokal sederhana untuk membantu guru melihat progres perangkat ini.</p></div>
+  <div class="stats" id="stats"></div>
+  <div class="teacher-grid">
+    <div class="panel"><h3>Rubrik cepat</h3><div class="rubric"><label>Ide & Premis <b>20%</b></label><div class="bar"><i style="width:20%"></i></div><label>Struktur Cerita <b>25%</b></label><div class="bar"><i style="width:25%"></i></div><label>Karakter & Konflik <b>20%</b></label><div class="bar"><i style="width:20%"></i></div><label>Format Naskah <b>20%</b></label><div class="bar"><i style="width:20%"></i></div><label>Kelayakan Produksi <b>15%</b></label><div class="bar"><i style="width:15%"></i></div></div></div>
+    <div class="panel"><h3>Portfolio siswa</h3><p>Hasil kerja yang tersimpan dari akun siswa di browser ini.</p><div id="studentSubmissions" class="submission-list"></div><select id="portfolioStudent" class="portfolio-select"><option value="">Pilih siswa untuk dibuatkan portfolio</option></select><div class="teacher-actions"><button class="primary-btn" id="exportBtn">Buka Portfolio & PDF</button><button class="secondary-btn" id="copyBtn">Salin Ringkasan</button><button class="danger-btn" id="deleteStudentBtn">Hapus Siswa</button></div><div id="copyMessage"></div></div>
+  </div>
+</section>
+</main>
+
+<footer><span>SCRIPT LAB © 2026</span><span>Digital Writing Room • SMK Broadcasting & Perfilman</span></footer>
+<script src="script.js"></script>
+</body>
+</html>
