@@ -461,7 +461,8 @@ function renderForm(){
  document.getElementById("stageDesc").textContent=s.desc;
  document.getElementById("formArea").innerHTML=s.questions.map(q=>{
   const val=state.answers[q[0]]||"";
-  return `<div class="question"><label for="${q[0]}">${q[1]}</label><${q[3]} id="${q[0]}" ${q[3]==="textarea"?"rows='5'":""} placeholder="${q[2]}">${q[3]==="textarea"?esc(val):""}</${q[3]}>${q[3]!=="textarea"?`<small>${q[2]}</small>`:""}</div>`;
+  const control=q[3]==="textarea"?`<textarea id="${q[0]}" rows="5" placeholder="${esc(q[2])}">${esc(val)}</textarea>`:`<input id="${q[0]}" type="${esc(q[3])}" value="${esc(val)}" placeholder="${esc(q[2])}">`;
+  return `<div class="question"><label for="${q[0]}">${q[1]}</label>${control}${q[3]!=="textarea"?`<small>${esc(q[2])}</small>`:""}</div>`;
  }).join("");
  s.questions.forEach(q=>{document.getElementById(q[0]).value=state.answers[q[0]]||"";document.getElementById(q[0]).addEventListener("input",e=>{state.answers[q[0]]=e.target.value;feedback();save();updateStats();});});
  feedback();
