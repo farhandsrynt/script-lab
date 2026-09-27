@@ -1,21 +1,30 @@
 const stages = [
  {id:"ide", title:"Ide Cerita", desc:"Temukan gagasan inti sebelum masuk ke struktur cerita.", questions:[
   ["ide","Apa ide cerita yang ingin kamu angkat?","Tuliskan kejadian, gagasan, atau persoalan yang menarik bagimu.","textarea"],
+  ["tokohIde","Siapa tokoh yang mengalami cerita ini?","Sebutkan tokoh utama dan ciri yang paling menonjol.","textarea"],
+  ["masalahIde","Masalah apa yang mengganggu kehidupan tokoh?","Tuliskan masalah yang dapat terlihat melalui tindakan atau kejadian.","textarea"],
+  ["taruhanIde","Apa akibatnya jika masalah tidak terselesaikan?","Jelaskan dampaknya bagi tokoh atau orang di sekitarnya.","textarea"],
   ["inspirasi","Apa yang membuat kamu tertarik pada ide tersebut?","Bisa berasal dari pengalaman, berita, lingkungan, atau imajinasi.","textarea"]
  ]},
  {id:"premis", title:"Premis", desc:"Padatkan cerita menjadi tokoh, tujuan, dan konflik.", questions:[
   ["tokoh","Siapa tokoh utama?","Sebutkan nama/peran dan karakter singkat.","text"],
   ["tujuan","Apa yang ingin dicapai tokoh?","Tujuan harus konkret dan dapat diperjuangkan.","textarea"],
-  ["konflik","Apa yang menghalangi tokoh?","Jelaskan hambatan utama.","textarea"]
+  ["konflik","Apa yang menghalangi tokoh?","Jelaskan hambatan utama.","textarea"],
+  ["taruhan","Apa yang dipertaruhkan?","Jelaskan konsekuensi jika tokoh gagal.","textarea"]
  ]},
  {id:"logline", title:"Logline", desc:"Buat satu kalimat yang membuat orang ingin mengetahui ceritanya.", questions:[
-  ["logline","Tulis logline ceritamu","Gunakan pola: Tokoh + tujuan + konflik + taruhan/risiko.","textarea"]
+  ["judulCerita","Judul sementara","Pilih judul yang spesifik, menarik, dan selaras dengan cerita.","text"],
+  ["logline","Tulis logline ceritamu","Satu kalimat: tokoh + tujuan + konflik + taruhan. Tampilkan paradoks/ironi dan gambaran yang bisa dibayangkan.","textarea"],
+  ["targetPenonton","Siapa target penontonnya?","Sebutkan kelompok penonton yang spesifik, misalnya remaja 15–18 tahun penyuka drama sekolah.","text"]
  ]},
  {id:"sinopsis", title:"Sinopsis", desc:"Kembangkan logline menjadi gambaran cerita yang utuh.", questions:[
   ["sinopsis","Sinopsis 1–3 paragraf","Ceritakan awal, perkembangan konflik, dan arah penyelesaian.","textarea"]
  ]},
  {id:"karakter", title:"Karakter", desc:"Bangun tokoh yang memiliki tujuan, kebutuhan, dan perubahan.", questions:[
   ["karakter","Tokoh utama dan karakterisasinya","Jelaskan usia/peran, sifat, kelebihan, kelemahan, dan kebiasaan.","textarea"],
+  ["keinginan","Apa keinginan luar tokoh?","Tuliskan tujuan nyata yang sedang dikejar tokoh.","textarea"],
+  ["kebutuhan","Apa kebutuhan batin yang belum disadari tokoh?","Jelaskan pelajaran atau perubahan yang sebenarnya dibutuhkan.","textarea"],
+  ["kelemahan","Apa kelemahan atau kontradiksi tokoh?","Pilih sifat yang dapat memperumit usahanya.","textarea"],
   ["perubahan","Perubahan apa yang dialami tokoh?","Bandingkan kondisi tokoh di awal dan akhir cerita.","textarea"]
  ]},
  {id:"alur", title:"Alur", desc:"Susun peristiwa agar konflik berkembang secara logis.", questions:[
@@ -36,6 +45,18 @@ const stages = [
   ["produksi","Catatan produksi","Tuliskan kebutuhan lokasi, properti, pemain, dan hal yang perlu diperhatikan.","textarea"]
  ]}
 ];
+
+const reviewSources={
+ ide:"Acuan konsep: John Truby, The Anatomy of Story. Indikator yang tampil adalah rubrik latihan SCRIPT LAB.",
+ premis:"Acuan konsep: John Truby, The Anatomy of Story. Indikator yang tampil adalah rubrik latihan SCRIPT LAB.",
+ logline:"Acuan konsep: Blake Snyder, Save the Cat!; empat unsur khusus logline di sini mengikuti rubrik pengajar. Pemeriksaan otomatis hanya indikator teks, bukan penilaian makna.",
+ sinopsis:"Acuan struktur: Syd Field, Screenplay: The Foundations of Screenwriting. Indikator yang tampil adalah rubrik latihan SCRIPT LAB.",
+ karakter:"Acuan konsep: John Truby, The Anatomy of Story. Indikator yang tampil adalah rubrik latihan SCRIPT LAB.",
+ alur:"Acuan struktur: Syd Field, Screenplay: The Foundations of Screenwriting. Indikator yang tampil adalah rubrik latihan SCRIPT LAB.",
+ scene:"Acuan penulisan skenario: Syd Field, Screenplay: The Foundations of Screenwriting. Indikator yang tampil adalah rubrik latihan SCRIPT LAB.",
+ dialog:"Acuan dialog: Robert McKee, Dialogue: The Art of Verbal Action for Page, Stage, and Screen. Indikator yang tampil adalah rubrik latihan SCRIPT LAB.",
+ screenplay:"Acuan format: David Trottier, The Screenwriter's Bible. Indikator yang tampil adalah rubrik latihan SCRIPT LAB."
+};
 
 const formats = [
  ["01","Naskah Berita","Fakta, lead, tubuh berita, penutup."],
@@ -442,18 +463,102 @@ function renderForm(){
   const val=state.answers[q[0]]||"";
   return `<div class="question"><label for="${q[0]}">${q[1]}</label><${q[3]} id="${q[0]}" ${q[3]==="textarea"?"rows='5'":""} placeholder="${q[2]}">${q[3]==="textarea"?esc(val):""}</${q[3]}>${q[3]!=="textarea"?`<small>${q[2]}</small>`:""}</div>`;
  }).join("");
- s.questions.forEach(q=>{document.getElementById(q[0]).value=state.answers[q[0]]||"";document.getElementById(q[0]).addEventListener("input",e=>{state.answers[q[0]]=e.target.value;save();updateStats();});});
+ s.questions.forEach(q=>{document.getElementById(q[0]).value=state.answers[q[0]]||"";document.getElementById(q[0]).addEventListener("input",e=>{state.answers[q[0]]=e.target.value;feedback();save();updateStats();});});
  feedback();
  document.getElementById("prevBtn").disabled=state.current===0;
  document.getElementById("nextBtn").textContent=state.current===stages.length-1?"Selesaikan Naskah ✓":"Simpan & Lanjut →";
 }
 
+function getStageReview(stageId, answers){
+ const text = key => String(answers[key] || "").trim();
+ const matches = (key, pattern) => pattern.test(text(key));
+ const has = (key, minimum = 8) => text(key).length >= minimum;
+ const checks = [];
+ const add = (label, passed, advice) => checks.push({label, passed, advice});
+
+ if(stageId === "ide"){
+  add("Gagasan spesifik", has("ide", 40), "Persempit gagasan menjadi satu kejadian atau persoalan yang dapat diceritakan.");
+  add("Tokoh utama", has("tokohIde", 4), "Tentukan siapa yang mengalami cerita dan apa ciri khasnya.");
+  add("Masalah yang dapat dimainkan", has("masalahIde", 12), "Nyatakan masalah melalui tindakan atau kejadian, bukan hanya tema abstrak.");
+  add("Taruhan atau akibat", has("taruhanIde", 8), "Jelaskan apa yang akan hilang atau berubah jika masalah dibiarkan.");
+  add("Alasan personal / relevansi", has("inspirasi", 12), "Hubungkan ide dengan pengalaman, pengamatan, berita, atau pertanyaan yang ingin kamu angkat.");
+ }else if(stageId === "premis"){
+  add("Tokoh utama teridentifikasi", has("tokoh", 3), "Sebutkan tokoh dengan peran atau ciri yang membedakannya.");
+  add("Tujuan dapat diperjuangkan", has("tujuan", 10), "Rumuskan tindakan atau hasil konkret yang ingin dicapai tokoh.");
+  add("Hambatan utama", has("konflik", 10), "Tentukan siapa atau apa yang secara nyata menghalangi tujuan tokoh.");
+  add("Konsekuensi kegagalan", has("taruhan", 8), "Tambahkan akibat yang membuat tujuan itu penting sekarang.");
+ }else if(stageId === "logline"){
+  const line = text("logline");
+  const title = text("judulCerita");
+  const titleIsGeneric = /^(cerita saya|judul|film|kisah|tanpa judul)$/i.test(title);
+  add("Judul kuat dan spesifik", title.length >= 3 && title.length <= 60 && !titleIsGeneric, "Pilih judul ringkas yang khas, memancing rasa ingin tahu, dan terkait dengan konflik atau ironi cerita.");
+  add("Ironi / paradoks", matches("logline", /\b(justru|padahal|tetapi|namun|meski|walau|ironis|berlawanan|kontras|sebaliknya)\b/i), "Tampilkan pertentangan yang menarik: misalnya kelebihan tokoh justru menjadi penghalang tujuannya. Indikator kata tidak dapat memastikan ironi secara makna.");
+  add("Gambaran mental yang konkret", matches("logline", /\b(di|ke|dari|menyelinap|berlari|menyembunyikan|mengejar|membangun|membongkar|menghapus|menyelamatkan|merekam|menukar|terjebak|panggung|sekolah|rumah|stasiun|studio|desa|kota|hutan|kapal|kamera|surat|rekaman|pintu|jembatan)\b/i), "Masukkan tempat, benda, atau aksi spesifik yang membuat pembaca bisa membayangkan satu gambar adegan.");
+  add("Target penonton jelas", has("targetPenonton", 5), "Sebutkan kelompok penonton yang terarah, bukan hanya 'semua orang'.");
+  add("Tokoh, tujuan, dan hambatan", line.length >= 35 && matches("logline", /\b(ingin|berusaha|harus|mencari|menyelamatkan|membuktikan|melarikan diri|mengungkap|merebut|memenangkan|mencegah)\b/i) && matches("logline", /\b(tetapi|namun|meski|walau|sebelum|sementara|ketika|agar|demi|melawan|terancam|kehilangan|gagal)\b/i), "Pastikan satu kalimat menjelaskan siapa tokohnya, apa yang ia kejar, dan hambatan atau risiko yang menghadang.");
+ }else if(stageId === "sinopsis"){
+  const synopsis = text("sinopsis");
+  const words = synopsis.split(/\s+/).filter(Boolean).length;
+  add("Ringkasan cukup berkembang", words >= 60, "Kembangkan sinopsis menjadi beberapa paragraf ringkas yang memuat sebab-akibat, bukan daftar kejadian.");
+  add("Situasi awal dan pemicu", matches("sinopsis", /\b(awalnya|pada awal|suatu hari|ketika|saat|setelah)\b/i), "Tunjukkan keadaan tokoh sebelum kejadian yang mengganggu keseimbangannya.");
+  add("Konflik meningkat", matches("sinopsis", /\b(namun|tetapi|masalah|konflik|rintangan|gagal|terpaksa|semakin|ancaman)\b/i), "Perlihatkan hambatan yang makin sulit dan pilihan yang harus diambil tokoh.");
+  add("Klimaks / keputusan", matches("sinopsis", /\b(memutuskan|memilih|menghadapi|akhirnya|puncak|berhasil|gagal)\b/i), "Nyatakan keputusan atau tindakan puncak yang menentukan hasil cerita.");
+  add("Akhir dan konsekuensi", matches("sinopsis", /\b(akhirnya|pada akhirnya|akibatnya|sejak itu|berubah|menyadari|kehilangan|menyelamatkan)\b/i), "Tutup dengan hasil pilihan tokoh dan perubahan yang terjadi.");
+ }else if(stageId === "karakter"){
+  add("Identitas dan ciri khas", has("karakter", 20), "Jelaskan peran, sifat dominan, kebiasaan, serta hal yang membuat tokoh berbeda.");
+  add("Keinginan luar", has("keinginan", 8), "Tulis tujuan yang terlihat dan dapat diukur melalui tindakan.");
+  add("Kebutuhan batin", has("kebutuhan", 8), "Tentukan perubahan atau pemahaman yang dibutuhkan tokoh, meski belum ia sadari.");
+  add("Kelemahan / kontradiksi", has("kelemahan", 8), "Pilih kelemahan yang benar-benar menghambat keinginan tokoh.");
+  add("Perubahan sepanjang cerita", has("perubahan", 12), "Bandingkan sikap atau pilihan tokoh di awal dan akhir cerita.");
+ }else if(stageId === "alur"){
+  add("Situasi awal dan tokoh", has("awal", 15), "Kenalkan keadaan tokoh sebelum konflik utama dimulai.");
+  add("Pemicu dan tujuan", has("tengah", 20), "Sebutkan kejadian yang memaksa tokoh bertindak dan tujuan yang muncul karenanya.");
+  add("Hambatan meningkat", matches("tengah", /\b(namun|tetapi|semakin|gagal|rintangan|terpaksa|ancaman|kehilangan|lebih sulit)\b/i), "Tambahkan hambatan yang meningkat, bukan mengulang masalah yang sama.");
+  add("Klimaks berupa pilihan / tindakan", matches("akhir", /\b(memilih|memutuskan|menghadapi|melawan|mengorbankan|menolak|menerima|berhasil|gagal)\b/i), "Tunjukkan tindakan atau keputusan terbesar tokoh pada puncak konflik.");
+  add("Konsekuensi dan resolusi", has("akhir", 15), "Jelaskan akibat keputusan itu dan keadaan cerita setelah konflik.");
+ }else if(stageId === "scene"){
+  const scene = text("scene");
+  const sceneCount = scene.split(/\n+/).filter(line => line.trim().length > 8).length;
+  add("Minimal tiga beat / adegan", sceneCount >= 3, "Pisahkan setidaknya tiga adegan atau beat pada baris terpisah agar urutan mudah diperiksa.");
+  add("Lokasi dan waktu terbaca", matches("scene", /\b(int\.|ext\.|pagi|siang|sore|malam|kelas|rumah|halaman|koridor|studio|stasiun|kantin|lapangan)\b/i), "Cantumkan lokasi dan waktu; format screenplay memakai slugline seperti INT. KELAS - PAGI.");
+  add("Aksi terlihat kamera", matches("scene", /\b(melihat|menatap|berjalan|berlari|membuka|menutup|mengambil|meletakkan|menyembunyikan|jatuh|mengetuk|tersenyum|menangis|berdiri|duduk)\b/i), "Ubah informasi abstrak menjadi tindakan, ekspresi, atau benda yang dapat direkam kamera.");
+  add("Visual dan perubahan konflik", has("visual", 15), "Jelaskan apa yang terlihat dan bagaimana keadaan berubah dari satu adegan ke adegan berikutnya.");
+ }else if(stageId === "dialog"){
+  const dialogue = text("dialog");
+  const lines = dialogue.split(/\n+/).map(line => line.trim()).filter(Boolean);
+  const speakerCues = lines.filter(line => /^[A-Z][A-Z0-9 _'-]{1,25}:?$/.test(line));
+  add("Sedikitnya delapan baris dialog", lines.length >= 8, "Tulis percakapan minimal delapan baris; pisahkan cue nama tokoh dan ucapannya.");
+  add("Dua suara tokoh", new Set(speakerCues).size >= 2, "Beri setiap tokoh pilihan kata atau cara bicara yang berbeda dan beri label nama.");
+  add("Tujuan / konflik dalam percakapan", matches("dialog", /\b(tetapi|jangan|harus|tidak mau|minta|tolak|bohong|pergi|tetap|percaya|rahasia|mengapa)\b/i), "Pastikan kedua tokoh menginginkan sesuatu, bukan sekadar bertukar informasi.");
+  add("Subteks dijelaskan", has("subtext", 10), "Terangkan maksud tersembunyi atau emosi yang tidak diucapkan langsung.");
+  add("Dialog dapat diucapkan", lines.some(line => line.length > 15 && line.length < 180), "Baca dialog keras-keras; pecah kalimat yang terasa seperti penjelasan panjang.");
+ }else if(stageId === "screenplay"){
+  const screenplay = text("screenplay");
+  const sluglines = (screenplay.match(/^\s*(INT\.|EXT\.|INT\/EXT\.|EXT\/INT\.)\s+.+/gim) || []).length;
+  const cues = screenplay.split(/\n+/).map(line => line.trim()).filter(line => /^[A-Z][A-Z0-9 _'-]{1,25}$/.test(line));
+  add("Slugline INT./EXT. dan waktu", sluglines >= 1 && /\b(PAGI|SIANG|SORE|MALAM|SUBUH|DAY|NIGHT)\b/i.test(screenplay), "Awali setiap adegan dengan INT./EXT. + lokasi + waktu yang konsisten.");
+  add("Aksi ditulis secara visual", screenplay.split(/\s+/).filter(Boolean).length >= 45 && matches("screenplay", /\b(melihat|menatap|berjalan|berlari|membuka|menutup|mengambil|meletakkan|masuk|keluar|berdiri|duduk)\b/i), "Tulis aksi yang bisa dilihat atau didengar; hindari instruksi tentang pikiran yang tidak tampak di layar.");
+  add("Cue karakter", new Set(cues).size >= 1, "Letakkan nama karakter dengan huruf kapital pada baris tersendiri sebelum dialog.");
+  add("Dialog dan aksi terpisah", cues.some(cue => screenplay.includes(cue + "\n")), "Pisahkan nama karakter, dialog, dan paragraf aksi agar halaman mudah dibaca kru.");
+  add("Catatan kelayakan produksi", has("produksi", 15) && matches("produksi", /\b(lokasi|properti|pemain|aktor|kostum|suara|cahaya|izin|durasi)\b/i), "Catat kebutuhan lokasi, pemain, properti, suara/cahaya, atau kendala produksi yang relevan.");
+ }
+
+ return checks;
+}
+
 function feedback(){
- const s=stages[state.current], vals=s.questions.map(q=>state.answers[q[0]]||"");
- const filled=vals.filter(v=>v.trim().length>0).length;
- const box=document.getElementById("feedback");
- let msg=filled===0?"💡 <strong>Pemantik:</strong> Mulai dari satu jawaban sederhana. Tidak harus sempurna; revisi adalah bagian dari proses menulis.":filled<vals.length?"📝 <strong>Feedback:</strong> Beberapa bagian masih kosong. Lengkapi sebelum berpindah agar struktur ceritamu semakin kuat.":"✓ <strong>Good draft:</strong> Semua bagian tahap ini sudah terisi. Baca ulang dan tanyakan: apakah penonton bisa membayangkan ceritanya?";
- box.innerHTML=msg;
+ const stage = stages[state.current];
+ const checks = getStageReview(stage.id, state.answers);
+ const passed = checks.filter(check => check.passed).length;
+ const percent = Math.round(passed / checks.length * 100);
+ const firstMissing = checks.find(check => !check.passed);
+ const sourceNote = `<p class="feedback-source">${reviewSources[stage.id]}</p>`;
+ document.getElementById("feedback").innerHTML = `
+  <div class="feedback-heading"><div><strong>Koreksi Otomatis · ${stage.title}</strong><span>${passed} dari ${checks.length} indikator terdeteksi</span></div><b>${percent}%</b></div>
+  <ul class="feedback-checklist">${checks.map(check => `<li class="${check.passed ? "is-passed" : "is-missing"}"><span aria-hidden="true">${check.passed ? "✓" : "!"}</span><div><strong>${check.label}</strong>${check.passed ? "" : `<small>${check.advice}</small>`}</div></li>`).join("")}</ul>
+  <p class="feedback-next">${firstMissing ? `<strong>Prioritas revisi:</strong> ${firstMissing.advice}` : "Semua indikator awal terdeteksi. Baca ulang untuk memastikan hubungan sebab-akibat dan makna cerita benar-benar kuat."}</p>
+  <p class="feedback-note">Skor menunjukkan kelengkapan indikator tulisan, bukan penilaian final atas mutu cerita. Tinjau ulang bersama guru.</p>
+  ${sourceNote}`;
 }
 function goStage(i){state.current=i;save();renderStages();renderForm();document.getElementById("workspace").scrollIntoView({behavior:"smooth"});}
 document.getElementById("prevBtn").onclick=()=>goStage(Math.max(0,state.current-1));
