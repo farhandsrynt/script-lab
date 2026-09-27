@@ -240,6 +240,13 @@ archiveStyleTag.textContent = archiveStyles;
 document.head.appendChild(archiveStyleTag);
 
 
+const practiceTasks=[
+ {id:"logline",title:"Buat 3 Logline",label:"PRAKTIK 1",duration:"15 menit",objective:"Tulis tiga ide cerita dalam satu kalimat dengan tujuan, konflik, dan taruhan yang jelas.",steps:["Pilih satu tema yang paling kamu minati.","Buat 3 logline dengan pola tokoh + tujuan + konflik.","Pilih logline yang paling kuat lalu revisi ulang."],difficulty:"Pemula"},
+ {id:"scene",title:"Kembangkan 3 Scene Utama",label:"PRAKTIK 2",duration:"20 menit",objective:"Ubah ide menjadi adegan yang bisa dilihat dan dipahami penonton.",steps:["Tuliskan 3 scene utama.","Tentukan lokasi dan waktu masing-masing scene.","Tambahkan aksi utama yang mendorong konflik."],difficulty:"Menengah"},
+ {id:"dialog",title:"Tulis Dialog Singkat",label:"PRAKTIK 3",duration:"18 menit",objective:"Latih dialog yang natural, jelas, dan punya subteks.",steps:["Buat 2 tokoh dengan tujuan berlawanan.","Tulis 6–8 baris dialog.","Tambahkan subteks di balik percakapan."],difficulty:"Menengah"},
+ {id:"storyboard",title:"Storyboard Sederhana",label:"PRAKTIK 4",duration:"25 menit",objective:"Visualisasikan cerita kamu dalam 4 panel utama agar mudah diproduksi.",steps:["Buat 4 panel.","Setiap panel harus berisi aksi, lokasi, dan emosi.","Cek alur dari awal sampai klimaks."],difficulty:"Lanjut"}
+];
+
 const challenges=[
  ["BUDGET","Rp500.000","Pemain maksimal 3 orang","Lokasi maksimal 2 tempat","Durasi 5–7 menit"],
  ["WAKTU","1 hari produksi","Pemain maksimal 4 orang","Tanpa lokasi berbayar","Durasi 3–5 menit"],
@@ -259,7 +266,58 @@ function renderChallenge(challenge){
  document.getElementById("challengeResult").innerHTML=`<strong>${challenge[0]} CHALLENGE</strong><br>${challenge.slice(1).map(x=>"• "+x).join("<br>")}<div class="challenge-advice"><b>IDE CERITA: ${idea.idea}</b><p>${idea.concept}</p><p><strong>Arah pengembangan:</strong> ${idea.tip}</p><strong>CHECKLIST PRODUKSI</strong><ul>${idea.checklist.map(item=>`<li>${item}</li>`).join("")}</ul></div>`;
 }
 
-const defaultState=()=>({current:0,answers:{},completed:{},challenge:null});
+function renderPracticeBoard(){
+ const panel=document.getElementById("practicePanel");
+ if(!panel) return;
+ const completedCount = practiceTasks.filter(task => Boolean(state.practice?.[task.id])).length;
+ const percent = Math.round((completedCount / practiceTasks.length) * 100);
+ const taskCards = practiceTasks.map(task => {
+  const done = Boolean(state.practice?.[task.id]);
+  return `<article class="practice-card ${done ? "done" : ""}">
+    <div class="practice-card-head">
+      <div>
+        <span class="practice-chip">${task.label}</span>
+        <h4>${task.title}</h4>
+      </div>
+      <span class="practice-chip">${task.duration}</span>
+    </div>
+    <p>${task.objective}</p>
+    <ul>${task.steps.map(step => `<li>${step}</li>`).join("")}</ul>
+    <button type="button" data-practice-id="${task.id}">${done ? "Selesai ✓" : "Mulai Praktik"}</button>
+  </article>`;
+ }).join("");
+
+ panel.innerHTML = `
+  <div class="practice-summary">
+    <div class="practice-summary-header">
+      <div>
+        <p class="eyebrow">MISSION LAB</p>
+        <h3>${percent}%</h3>
+      </div>
+      <span class="summary-badge">Daily loop</span>
+    </div>
+    <div class="practice-bar"><i style="width:${percent}%"></i></div>
+    <div class="practice-meta">
+      <div><strong>${completedCount}</strong><span>tugas selesai</span></div>
+      <div><strong>${practiceTasks.length}</strong><span>total misi</span></div>
+      <div><strong>${practiceTasks.filter(task => !state.practice?.[task.id]).length}</strong><span>tersisa</span></div>
+    </div>
+  </div>
+  <div class="practice-list">${taskCards || '<p class="task-empty">Belum ada tugas.</p>'}</div>
+ `;
+
+ panel.querySelectorAll("[data-practice-id]").forEach(button => {
+  button.addEventListener("click", () => {
+   const id = button.getAttribute("data-practice-id");
+   state.practice = { ...(state.practice || {}), [id]: true };
+   save();
+   renderPracticeBoard();
+   updateStats();
+  });
+ });
+}
+
+const defaultState=()=>({current:0,answers:{},completed:{},challenge:null,practice:{}});
 const SUPABASE_URL="https://nlzneuqpnmtzmpmbxxnp.supabase.co";
 const SUPABASE_KEY="sb_publishable_Yu2c4Zm4YFkbMy6BHPf9rw_D6RztvSg";
 const supabaseHeaders={"apikey":SUPABASE_KEY,"Authorization":`Bearer ${SUPABASE_KEY}`,"Content-Type":"application/json"};
@@ -271,14 +329,14 @@ let state=currentUser?.state||defaultState();
 
 async function syncStudentWork(){
  if(!currentUser||currentUser.role!=="student") return;
- await fetch(`${SUPABASE_URL}/rest/v1/student_work`,{method:"POST",headers:{...supabaseHeaders,"Prefer":"resolution=merge-duplicates,return=minimal"},body:JSON.stringify({account_key:currentUser.username,student_name:currentUser.name,absence_number:Number(currentUser.absence),answers:state.answers,completed:state.completed,current_stage:state.current,challenge:state.challenge,updated_at:new Date().toISOString()})});
+ await fetch(`${SUPABASE_URL}/rest/v1/student_work`,{method:"POST",headers:{...supabaseHeaders,"Prefer":"resolution=merge-duplicates,return=minimal"},body:JSON.stringify({account_key:currentUser.username,student_name:currentUser.name,absence_number:Number(currentUser.absence),answers:state.answers,completed:state.completed,current_stage:state.current,challenge:state.challenge,practice:state.practice||{},updated_at:new Date().toISOString()})});
 }
 async function loadStudentWork(user){
  if(!user||user.role!=="student") return;
  try{
   const response=await fetch(`${SUPABASE_URL}/rest/v1/student_work?account_key=eq.${encodeURIComponent(user.username)}&select=*`,{headers:supabaseHeaders});
   const rows=await response.json();
-  if(rows[0]){state={current:rows[0].current_stage||0,answers:rows[0].answers||{},completed:rows[0].completed||{},challenge:rows[0].challenge||null};user.state=state;localStorage.setItem("scriptLabUsers",JSON.stringify(users));}
+  if(rows[0]){state={current:rows[0].current_stage||0,answers:rows[0].answers||{},completed:rows[0].completed||{},challenge:rows[0].challenge||null,practice:rows[0].practice||{}};user.state=state;localStorage.setItem("scriptLabUsers",JSON.stringify(users));}
  }catch(error){console.warn("Supabase tidak dapat diakses; memakai data lokal.",error);}
 }
 function save(){
@@ -413,7 +471,8 @@ document.getElementById("challengeBtn").onclick=()=>{
 function updateStats(){
  const total=stages.length, done=Object.values(state.completed).filter(Boolean).length;
  const percent=Math.round(done/total*100);document.getElementById("heroPercent").textContent=percent+"%";
- document.getElementById("stats").innerHTML=[["Progress",percent+"%","Tahap screenplay"],["Tahap selesai",done,"dari "+total],["Jawaban",Object.keys(state.answers).filter(k=>state.answers[k].trim()).length,"isian tersimpan"],["Challenge",state.challenge?"1":"0","tantangan dibuat"]].map(x=>`<div class="stat"><strong>${x[1]}</strong><span>${x[0]} — ${x[2]}</span></div>`).join("");
+ const practiceDone=Object.values(state.practice||{}).filter(Boolean).length;
+ document.getElementById("stats").innerHTML=[["Progress",percent+"%","Tahap screenplay"],["Tahap selesai",done,"dari "+total],["Jawaban",Object.keys(state.answers).filter(k=>state.answers[k].trim()).length,"isian tersimpan"],["Praktik",`${practiceDone}/${practiceTasks.length}`,"latihan mandiri"]].map(x=>`<div class="stat"><strong>${x[1]}</strong><span>${x[0]} — ${x[2]}</span></div>`).join("");
  const studentProgress=document.getElementById("studentProgress");
  if(studentProgress) studentProgress.innerHTML=`<strong>${percent}%</strong><span>${done} dari ${total} tahap selesai</span><div class="student-progress-track"><i style="width:${percent}%"></i></div>`;
 }
@@ -511,7 +570,7 @@ function activateSession(){
  document.body.classList.remove("locked");document.body.classList.toggle("teacher-mode",currentUser.role==="teacher");document.body.classList.toggle("student-mode",currentUser.role==="student");
  document.getElementById("authScreen").classList.add("hidden");document.getElementById("sessionLabel").textContent=`${currentUser.name||currentUser.username} · ${currentUser.role==="teacher"?"Guru":"Siswa"}`;
  document.querySelector('nav a[href="#teacher"]').hidden=currentUser.role!=="teacher";
- renderJourney();renderStages();renderForm();updateStats();
+ renderJourney();renderStages();renderForm();renderPracticeBoard();updateStats();
  if(currentUser.role==="teacher") renderSubmissions();
 }
 window.goStage=goStage;
