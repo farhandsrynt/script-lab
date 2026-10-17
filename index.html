@@ -16,22 +16,27 @@
   <div class="auth-card">
     <p class="eyebrow">SCRIPT LAB / RUANG BELAJAR</p>
     <h1>Masuk ke<br><em>ruangmu.</em></h1>
-    <p class="auth-lead">Siswa menyusun naskah. Guru memantau hasil kerja dari satu dashboard.</p>
+    <p class="auth-lead">Siswa individu dan kelompok menyusun naskah. Guru memantau hasil kerja dari satu dashboard.</p>
     <form id="loginForm">
       <label for="loginRole">Masuk sebagai</label>
-      <select id="loginRole"><option value="student">Siswa</option><option value="teacher">Guru</option></select>
+      <select id="loginRole"><option value="student">Siswa individu</option><option value="group">Siswa kelompok</option><option value="teacher">Guru</option></select>
       <label for="loginUsername" id="usernameLabel">Nama lengkap</label>
       <input id="loginUsername" required autocomplete="name" placeholder="Masukkan nama lengkap siswa">
       <div id="absenceField">
         <label for="loginAbsence">Nomor absen</label>
         <input id="loginAbsence" type="number" min="1" max="99" placeholder="Contoh: 12">
       </div>
+      <div id="groupMembersField" hidden>
+        <label for="groupMembers">Nama anggota kelompok</label>
+        <textarea id="groupMembers" rows="4" placeholder="Tulis satu nama anggota per baris"></textarea>
+        <small>Masukkan 2–12 nama anggota, satu nama per baris.</small>
+      </div>
       <div id="passwordField">
-        <label for="loginPassword">Password</label>
+        <label for="loginPassword" id="passwordLabel">Password</label>
         <input id="loginPassword" type="password" autocomplete="current-password" placeholder="Masukkan password guru">
       </div>
       <button class="primary-btn auth-submit" type="submit">Masuk <span>→</span></button>
-      <p class="login-hint" id="loginHint">Siswa cukup memasukkan nama lengkap dan nomor absen.</p>
+      <p class="login-hint" id="loginHint">Siswa individu cukup memasukkan nama lengkap dan nomor absen.</p>
       <p class="login-error" id="loginError" role="alert"></p>
     </form>
   </div>
@@ -39,7 +44,7 @@
 <header class="topbar" id="appHeader">
   <a class="brand" href="#home"><span class="brand-mark">SL</span><span>SCRIPT LAB</span></a>
   <nav>
-    <a href="#home">Home</a><a href="#journey">Journey</a><a href="#workspace">Workspace</a><a href="#teacher">Teacher</a>
+    <a href="#home">Beranda</a><a href="#journey">Perjalanan</a><a href="#workspace">Ruang Naskah</a><a href="#teacher">Guru</a>
   </nav>
   <div class="session-actions"><span id="sessionLabel"></span><button class="ghost-btn" id="logoutBtn">Keluar</button><button class="ghost-btn" id="resetBtn">Reset Data</button></div>
 </header>
@@ -47,58 +52,38 @@
 <main>
 <section id="home" class="hero section">
   <div class="hero-copy">
-    <p class="eyebrow">BROADCASTING × FILM × EDUCATION</p>
-    <h1>Write it.<br><em>Visualize it.</em><br>Produce it.</h1>
-    <p class="lead">Laboratorium digital penulisan naskah untuk membantu siswa bergerak dari ide, struktur cerita, hingga naskah yang siap diproduksi.</p>
-    <div class="actions"><a class="primary-btn" href="#journey">Mulai Script Journey <span>→</span></a><button class="secondary-btn" id="exportTop">Export Progress</button></div>
+    <p class="eyebrow">SMK BROADCASTING × PERFILMAN</p>
+    <h1>Dari ide.<br><em>Jadi cerita.</em><br>Siap tayang.</h1>
+    <p class="lead">Ruang kreatif untuk mengembangkan ide, menulis naskah, dan belajar proses produksi film—satu tahap, satu karya.</p>
+    <div class="actions"><a class="primary-btn" href="#journey">Jelajahi tahap cerita <span>→</span></a><button class="secondary-btn" id="exportTop">Ekspor progres</button></div>
   </div>
   <div class="hero-card">
     <div class="screen-top"><span></span><span></span><span></span><b>LIVE WRITING ROOM</b></div>
     <div class="mini-scene">
-      <span class="scene-tag">INT. KELAS — PAGI</span>
-      <p>Seorang siswa menatap layar laptop. Kursor berkedip.</p>
-      <p class="muted">Apa yang akan terjadi berikutnya?</p>
+      <span class="scene-tag">INT. RUANG EDIT — MALAM</span>
+      <p>Rekaman terakhir berhenti tepat sebelum rahasia itu terbongkar.</p>
+      <p class="muted">CUT TO: apa yang terjadi berikutnya?</p>
     </div>
     <div class="progress-ring"><strong id="heroPercent">0%</strong><small>progress</small></div>
   </div>
 </section>
 
 <section id="journey" class="section">
-  <div class="section-heading"><div><p class="eyebrow">01 / SCRIPT JOURNEY</p><h2>Dari format Program televisi<br>menuju screenplay.</h2></div><p class="section-note">Selesaikan tahap demi tahap. Setiap karya tersimpan otomatis di browser perangkat ini.</p></div>
-  <div class="archive-layout">
-    <div id="journeyGrid" class="journey-grid"></div>
-    <div id="formatDetail" class="format-detail" aria-live="polite"></div>
-  </div>
+  <div class="section-heading"><div><p class="eyebrow">01 / MODUL MATERI</p><h2>Kenali format<br>naskah dan program.</h2></div><p class="section-note">Pilih modul untuk mempelajari fungsi, unsur, alur, dan hal penting dalam setiap format. Bagian ini berisi materi; latihan menulis tersedia di Ruang Naskah.</p></div>
+  <div id="journeyGrid" class="journey-grid"></div>
 </section>
 
-<div id="archiveModal" class="archive-modal hidden" aria-hidden="true">
-  <div class="archive-backdrop" data-close="archive"></div>
-  <div class="archive-panel" role="dialog" aria-modal="true" aria-labelledby="archiveTitle">
-    <button class="archive-close" type="button" aria-label="Tutup arsip">×</button>
-    <div class="archive-doc">
-      <div class="archive-topbar">
-        <div class="archive-window-controls">
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-        <div class="archive-meta">
-          <span class="archive-folder">Naskah</span>
-          <strong id="archiveTitle">Naskah Berita</strong>
-        </div>
-      </div>
-
-      <div class="archive-content">
-        <div class="archive-intro">
-          <p class="archive-kicker">Script Archive</p>
-          <h3 id="archiveHeading">Naskah Berita</h3>
-          <p>Contoh struktur naskah yang bisa Anda kembangkan sesuai kebutuhan.</p>
-        </div>
-
-        <textarea id="archiveEditor" class="archive-editor" spellcheck="false" aria-label="Editor naskah arsip"></textarea>
-      </div>
+<div id="moduleModal" class="module-modal hidden" aria-hidden="true">
+  <div class="module-backdrop" data-close="module"></div>
+  <section class="module-dialog" role="dialog" aria-modal="true" aria-labelledby="moduleDialogTitle" tabindex="-1">
+    <button class="module-close" type="button" aria-label="Tutup modul">×</button>
+    <div id="moduleModalContent" class="module-modal-content"></div>
+    <div class="module-navigation">
+      <button class="secondary-btn" id="previousModule" type="button">← Sebelumnya</button>
+      <button class="secondary-btn module-return" id="closeModule" type="button">Daftar modul</button>
+      <button class="primary-btn" id="nextModule" type="button">Selanjutnya →</button>
     </div>
-  </div>
+  </section>
 </div>
 
 <section id="workspace" class="section workspace-section">
@@ -134,7 +119,7 @@
   <div class="stats" id="stats"></div>
   <div class="teacher-grid">
     <div class="panel"><h3>Rubrik cepat</h3><div class="rubric"><label>Ide & Premis <b>20%</b></label><div class="bar"><i style="width:20%"></i></div><label>Struktur Cerita <b>25%</b></label><div class="bar"><i style="width:25%"></i></div><label>Karakter & Konflik <b>20%</b></label><div class="bar"><i style="width:20%"></i></div><label>Format Naskah <b>20%</b></label><div class="bar"><i style="width:20%"></i></div><label>Kelayakan Produksi <b>15%</b></label><div class="bar"><i style="width:15%"></i></div></div></div>
-    <div class="panel"><h3>Portfolio siswa</h3><p>Hasil kerja yang tersimpan dari akun siswa di browser ini.</p><div id="studentSubmissions" class="submission-list"></div><select id="portfolioStudent" class="portfolio-select"><option value="">Pilih siswa untuk dibuatkan portfolio</option></select><div class="teacher-actions"><button class="primary-btn" id="exportBtn">Buka Portfolio & PDF</button><button class="secondary-btn" id="copyBtn">Salin Ringkasan</button><button class="danger-btn" id="deleteStudentBtn">Hapus Siswa</button></div><div id="copyMessage"></div></div>
+    <div class="panel"><h3>Portfolio siswa & kelompok</h3><p>Hasil kerja individu dan kelompok yang tersimpan melalui akun masing-masing.</p><p id="dashboardStatus" class="dashboard-status" role="status"></p><div id="studentSubmissions" class="submission-list"></div><select id="portfolioStudent" class="portfolio-select"><option value="">Pilih siswa atau kelompok untuk dibuatkan portfolio</option></select><div class="teacher-actions"><button class="primary-btn" id="exportBtn">Buka Portfolio & PDF</button><button class="secondary-btn" id="copyBtn">Salin Ringkasan</button><button class="danger-btn" id="deleteStudentBtn">Hapus Data</button></div><div id="copyMessage"></div></div>
   </div>
 </section>
 </main>

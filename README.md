@@ -8,13 +8,14 @@ SCRIPT LAB adalah web app pembelajaran berbasis HTML, CSS, dan JavaScript untuk 
 - Form penulisan interaktif
 - Penyimpanan otomatis menggunakan localStorage
 - Progress dashboard
-- Pemeriksaan otomatis ide cerita, premis, dan logline: menilai keragaman kata, detail cerita, dan pola isi dasar; kolom yang belum memenuhi indikator ditandai merah dengan saran revisi
-- Feedback indikator untuk semua tahap; pemeriksaan berbasis aturan teks, bukan pemahaman semantik atau penulisan ulang oleh AI
+- Ulasan AI untuk ide cerita, premis, dan logline: menilai makna, konsistensi, dan hubungan sebab-akibat; kolom yang perlu direvisi ditandai merah dengan pertanyaan pemandu
+- AI berfungsi sebagai pendamping belajar: memberi feedback dan pertanyaan revisi pada ide cerita, premis, dan logline; siswa tetap bebas membuka dan melanjutkan ke tahap mana pun
 - Producer Challenge acak
 - Export portfolio siswa menjadi TXT
-- Login terpisah untuk siswa dan guru
-- Dashboard guru untuk melihat ringkasan hasil kerja siswa
-- Bisa dijalankan offline setelah file tersedia
+- Login siswa individu (nama + nomor absen), akun kerja kelompok (nama kelompok + nama anggota + PIN sederhana), dan guru
+- Satu ruang kerja bersama per kelompok; hasil kerja individu dan kelompok dipantau terpisah di dashboard guru
+- Dashboard guru menampilkan anggota kelompok serta mendukung ekspor portfolio individu/kelompok
+- Aplikasi tetap dapat dibuka sebagai file lokal; fitur AI dan sinkronisasi memerlukan internet
 
 ### Cara menjalankan
 1. Ekstrak folder `SCRIPT-LAB`.
@@ -23,12 +24,27 @@ SCRIPT LAB adalah web app pembelajaran berbasis HTML, CSS, dan JavaScript untuk 
 4. Pilih **Open with Live Server**.
 5. Website akan terbuka di browser.
 
-Tidak membutuhkan database atau instalasi server.
+Website dapat dibuka sebagai file lokal, tetapi penyimpanan bersama dan ulasan AI memerlukan koneksi internet serta konfigurasi Supabase.
 
 ### Login demo
  
 ### Supabase
-File `supabase-schema.sql` berisi tabel dan policy yang harus dijalankan satu kali melalui **Supabase → SQL Editor**. Setelah itu aplikasi akan menyimpan dan mengambil progres siswa melalui Supabase. Publishable key berada di `script.js`; jangan pernah memasukkan `service_role key` ke file frontend.
+Jalankan seluruh `supabase-schema.sql` melalui **Supabase → SQL Editor** setelah perubahan. Skema ini menambahkan penyimpanan jenis akun, anggota kelompok, progres praktik, dan fungsi RPC untuk membuat/memeriksa PIN kelompok. Kelompok cukup mengisi nama kelompok, 2–12 nama anggota (satu nama per baris), dan PIN minimal 4 karakter yang mudah diingat, misalnya `1234`. PIN disimpan sebagai hash; setelah 10 percobaan gagal, login akun kelompok dikunci selama 15 menit. Gunakan nama dan PIN yang sama setiap kali masuk; daftar anggota dapat diperbarui saat login. Semua anggota kelompok memakai satu progres/naskah bersama. Guru melihat akun individu dan kelompok secara terpisah di dashboard serta dapat membuka portfolio masing-masing.
+
+Jika login kelompok menampilkan “fungsi login kelompok belum ditemukan”, jalankan ulang skema terbaru di SQL Editor. Jika aplikasi menyebut alamat Supabase tidak dapat dijangkau, cocokkan `SUPABASE_URL` di `script.js` dengan **Project URL** aktif pada pengaturan API proyek Supabase. Live Server tidak dapat memperbaiki URL proyek yang salah atau sudah tidak aktif.
+
+Aplikasi memakai Supabase REST dari browser dan publishable key di `script.js`; jangan pernah memasukkan `service_role key` atau kunci OpenAI ke frontend. Skema demo saat ini memberi akses anon ke tabel `student_work` agar login siswa dapat menyimpan progres dan dashboard dapat membaca hasil. Login guru yang ada juga merupakan pemeriksaan frontend, bukan autentikasi server. Karena itu, jangan gunakan konfigurasi demo ini untuk data pribadi/rahasia atau produksi sebelum akses tabel dipindahkan ke Supabase Auth dan policy berbasis peran.
+
+Ulasan AI memakai Supabase Edge Function `review-writing` dan OpenAI Responses API (`gpt-4.1-mini`). Kunci OpenAI disimpan sebagai secret di Supabase, bukan di Git atau browser. Draft jawaban yang sedang diperiksa (tanpa nama atau nomor absen) dikirim ke OpenAI; beri tahu siswa sebelum menggunakan fitur ini.
+
+Untuk mengaktifkan ulasan AI:
+1. Jalankan `supabase-schema.sql` melalui SQL Editor Supabase.
+2. Pasang Supabase CLI, login dengan `supabase login`, lalu hubungkan folder proyek dengan `supabase link --project-ref <PROJECT_REF>`.
+3. Simpan secret OpenAI: `supabase secrets set OPENAI_API_KEY=<OPENAI_API_KEY>`.
+4. Deploy fungsi dari folder proyek: `supabase functions deploy review-writing --no-verify-jwt`.
+5. Buka aplikasi melalui Live Server atau hosting web (bukan `file://` jika browser memblokir permintaan lintas-origin). Pastikan proyek Supabase dan OpenAI memiliki batas penggunaan/biaya yang sesuai.
+
+Fungsi membatasi ukuran draft dan laju permintaan hingga 240 kali per menit per alamat IP, sementara browser membatasi ulasan otomatis menjadi paling banyak satu kali per 10 detik per sesi. Pemeriksaan membutuhkan internet; ketika AI tidak tersedia, aplikasi menampilkan kesalahan, tetapi siswa tetap dapat membuka dan melanjutkan tahap penulisan.
 
 Data progres tersimpan di Supabase dan dicadangkan di `localStorage` browser. Dashboard guru dapat mengambil hasil siswa dari perangkat berbeda setelah skema Supabase dijalankan.
 **Pertemuan awal**
@@ -51,4 +67,4 @@ Data progres tersimpan di Supabase dan dicadangkan di `localStorage` browser. Da
 - Jika memungkinkan, produksi film pendek.
 
 ### Catatan
-Versi ini sengaja dibuat tanpa backend agar langsung mudah digunakan di sekolah. Data tersimpan di browser masing-masing perangkat. Untuk pengumpulan seluruh siswa secara terpusat, versi berikutnya dapat ditambah Firebase/Supabase/Google Sheets.
+Aplikasi tetap dapat dijalankan secara lokal dengan penyimpanan browser. Untuk login kelompok dan pemantauan terpusat lintas perangkat, Supabase harus tersedia dan skema di atas harus sudah diterapkan.
