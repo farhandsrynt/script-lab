@@ -8,7 +8,8 @@ SCRIPT LAB adalah web app pembelajaran berbasis HTML, CSS, dan JavaScript untuk 
 - Form penulisan interaktif
 - Penyimpanan otomatis menggunakan localStorage
 - Progress dashboard
-- Feedback otomatis berdasarkan kelengkapan draft
+- Pemeriksaan otomatis ide cerita, premis, dan logline: menilai keragaman kata, detail cerita, dan pola isi dasar; kolom yang belum memenuhi indikator ditandai merah dengan saran revisi
+- Feedback indikator untuk semua tahap; pemeriksaan berbasis aturan teks, bukan pemahaman semantik atau penulisan ulang oleh AI
 - Producer Challenge acak
 - Export portfolio siswa menjadi TXT
 - Login terpisah untuk siswa dan guru

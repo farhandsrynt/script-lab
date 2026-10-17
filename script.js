@@ -7,7 +7,7 @@ const stages = [
   ["inspirasi","Apa yang membuat kamu tertarik pada ide tersebut?","Bisa berasal dari pengalaman, berita, lingkungan, atau imajinasi.","textarea"]
  ]},
  {id:"premis", title:"Premis", desc:"Padatkan cerita menjadi tokoh, tujuan, dan konflik.", questions:[
-  ["tokoh","Siapa tokoh utama?","Sebutkan nama/peran dan karakter singkat.","text"],
+  ["tokoh","Nama Tokoh Utama","Contoh: Rina, siswi kelas XI yang berani tetapi keras kepala.","text"],
   ["tujuan","Apa yang ingin dicapai tokoh?","Tujuan harus konkret dan dapat diperjuangkan.","textarea"],
   ["konflik","Apa yang menghalangi tokoh?","Jelaskan hambatan utama.","textarea"],
   ["taruhan","Apa yang dipertaruhkan?","Jelaskan konsekuensi jika tokoh gagal.","textarea"]
@@ -462,7 +462,7 @@ function renderForm(){
  document.getElementById("formArea").innerHTML=s.questions.map(q=>{
   const val=state.answers[q[0]]||"";
   const control=q[3]==="textarea"?`<textarea id="${q[0]}" rows="5" placeholder="${esc(q[2])}">${esc(val)}</textarea>`:`<input id="${q[0]}" type="${esc(q[3])}" value="${esc(val)}" placeholder="${esc(q[2])}">`;
-  return `<div class="question"><label for="${q[0]}">${q[1]}</label>${control}${q[3]!=="textarea"?`<small>${esc(q[2])}</small>`:""}</div>`;
+  return `<div class="question" data-field="${esc(q[0])}"><label for="${q[0]}">${q[1]}</label>${control}${q[3]!=="textarea"?`<small>${esc(q[2])}</small>`:""}</div>`;
  }).join("");
  s.questions.forEach(q=>{document.getElementById(q[0]).value=state.answers[q[0]]||"";document.getElementById(q[0]).addEventListener("input",e=>{state.answers[q[0]]=e.target.value;feedback();save();updateStats();});});
  feedback();
@@ -475,28 +475,41 @@ function getStageReview(stageId, answers){
  const matches = (key, pattern) => pattern.test(text(key));
  const has = (key, minimum = 8) => text(key).length >= minimum;
  const checks = [];
- const add = (label, passed, advice) => checks.push({label, passed, advice});
+ const add = (label, passed, advice, field = null) => checks.push({label, passed, advice, field});
+ const tokenize = value => value.toLowerCase().match(/[a-z]+/g) || [];
+ const stopWords = new Set("dan yang di ke dari untuk dengan adalah itu ini pada seorang sebuah atau tetapi namun karena agar jika akan sedang telah bisa dapat tidak bukan ia dia mereka tokoh cerita tentang saya sangat sekali menarik hebat bagus keren baik unik biasa seru menyenangkan banyak hal sesuatu".split(" "));
+ const meaningfulWords = value => tokenize(value).filter(word => word.length > 2 && !stopWords.has(word));
+ const hasSubstance = (value, minimumWords, minimumUnique) => {
+  const words = meaningfulWords(value);
+  return words.length >= minimumWords && new Set(words).size >= minimumUnique &&
+   words.length / Math.max(new Set(words).size, 1) <= 1.7;
+ };
+ const hasNarrativeAction = value => /\b(mencari|menemukan|menemui|menyelamatkan|membuktikan|mengungkap|menghadapi|kehilangan|terancam|terjebak|dikejar|ditolak|diusir|gagal|berusaha|berjuang|memilih|memutuskan|menyembunyikan|membuka|menutup|meninggal|sakit|hilang|kabur|melawan|mencegah|merebut|memenangkan|melindungi|merusak|menghancurkan|dituduh|terpaksa|bangkrut|kebakaran|kecelakaan|berubah|menghalangi|mengancam|dilarang|berbohong|mencuri|menculik|terpisah|terlambat|utang|rahasia|membongkar|melaporkan|mengeluarkan|dikeluarkan|menyimpan|menyelidiki|menuduh|mengambil|menggagalkan|membangun|mengusir)\b/i.test(value);
+ const hasSpecificGoal = value => /\b(mencari|menemukan|menyelamatkan|membuktikan|mengungkap|melarikan diri|memenangkan|menghentikan|mencegah|merebut|mengembalikan|membangun|membongkar|melaporkan|melindungi|memperbaiki|mengalahkan|membebaskan|menuntut|menyelesaikan|mencapai|memecahkan|menolong|mendapatkan|memperoleh|mendapat|menjadi juara)\b/i.test(value);
+ const hasConcreteConsequence = value => /\b(kehilangan|diusir|dikeluarkan|bangkrut|terpisah|meninggal|sakit|ditangkap|dipenjara|tidak bisa|tak bisa|terpaksa|hancur|rusak|rahasia terbongkar|kehilangan hak|kehilangan pekerjaan|kehilangan beasiswa)\b/i.test(value);
+ const hasSpecificInspiration = value => /\b(pengalaman|berita|melihat|menyaksikan|kejadian|lingkungan|keluarga|teman|sekolah|masyarakat|membaca|mengalami|pernah|bertanya|isu|peristiwa|observasi|terjadi)\b/i.test(value);
+ const isFiller = value => /^(tes|test|asdf|qwerty|abc|bla|ngarang|asal(?:-|\s)?asalan|tidak tahu|terserah|random)(?:\s+\1)*[.!?]*$/i.test(value.trim());
 
  if(stageId === "ide"){
-  add("Gagasan spesifik", has("ide", 40), "Persempit gagasan menjadi satu kejadian atau persoalan yang dapat diceritakan.");
-  add("Tokoh utama", has("tokohIde", 4), "Tentukan siapa yang mengalami cerita dan apa ciri khasnya.");
-  add("Masalah yang dapat dimainkan", has("masalahIde", 12), "Nyatakan masalah melalui tindakan atau kejadian, bukan hanya tema abstrak.");
-  add("Taruhan atau akibat", has("taruhanIde", 8), "Jelaskan apa yang akan hilang atau berubah jika masalah dibiarkan.");
-  add("Alasan personal / relevansi", has("inspirasi", 12), "Hubungkan ide dengan pengalaman, pengamatan, berita, atau pertanyaan yang ingin kamu angkat.");
+  add("Gagasan spesifik", hasSubstance(text("ide"), 7, 6) && hasNarrativeAction(text("ide")) && !isFiller(text("ide")), "Jelaskan siapa yang mengalami kejadian, apa yang terjadi, dan masalah yang membuatnya menarik. Satu tema umum atau kata-kata berulang belum menjadi ide cerita.", "ide");
+  add("Tokoh utama", hasSubstance(text("tokohIde"), 4, 4) && !isFiller(text("tokohIde")), "Jelaskan tokoh dengan beberapa detail yang membedakannya, misalnya nama/peran, sifat, kebiasaan, atau keinginan. Nama atau pujian umum seperti 'hebat dan menarik' saja belum cukup.", "tokohIde");
+  add("Masalah yang dapat dimainkan", hasSubstance(text("masalahIde"), 5, 4) && hasNarrativeAction(text("masalahIde")) && !isFiller(text("masalahIde")), "Tuliskan hambatan sebagai kejadian atau tindakan spesifik yang dialami tokoh. Jawaban umum seperti 'punya masalah' atau pengulangan kata belum cukup.", "masalahIde");
+  add("Taruhan atau akibat", hasSubstance(text("taruhanIde"), 5, 4) && /\b(jika|kalau|bila|akibat|sehingga|maka|akan)\b/i.test(text("taruhanIde")) && hasConcreteConsequence(text("taruhanIde")) && !isFiller(text("taruhanIde")), "Terangkan akibat spesifik jika masalah tidak selesai—apa yang akan hilang, rusak, atau berubah bagi tokoh. 'Banyak hal buruk terjadi' belum menjelaskan taruhannya.", "taruhanIde");
+  add("Alasan personal / relevansi", hasSubstance(text("inspirasi"), 5, 4) && hasSpecificInspiration(text("inspirasi")) && !isFiller(text("inspirasi")), "Sebutkan sumber ketertarikan yang nyata—pengalaman, pengamatan, berita, atau pertanyaan tertentu—bukan sekadar 'karena menarik'.", "inspirasi");
  }else if(stageId === "premis"){
-  add("Tokoh utama teridentifikasi", has("tokoh", 3), "Sebutkan tokoh dengan peran atau ciri yang membedakannya.");
-  add("Tujuan dapat diperjuangkan", has("tujuan", 10), "Rumuskan tindakan atau hasil konkret yang ingin dicapai tokoh.");
-  add("Hambatan utama", has("konflik", 10), "Tentukan siapa atau apa yang secara nyata menghalangi tujuan tokoh.");
-  add("Konsekuensi kegagalan", has("taruhan", 8), "Tambahkan akibat yang membuat tujuan itu penting sekarang.");
+  add("Tokoh utama teridentifikasi", hasSubstance(text("tokoh"), 2, 2) && !isFiller(text("tokoh")), "Sebutkan nama dan/atau peran tokoh beserta ciri yang membuatnya spesifik, bukan jawaban umum.", "tokoh");
+  add("Tujuan dapat diperjuangkan", hasSubstance(text("tujuan"), 4, 4) && hasSpecificGoal(text("tujuan")) && !isFiller(text("tujuan")), "Rumuskan tindakan spesifik yang ingin dilakukan tokoh, seperti mengungkap rahasia, memenangkan sesuatu, atau menyelamatkan seseorang. 'Ingin hal yang baik' belum menjadi tujuan cerita.", "tujuan");
+  add("Hambatan utama", hasSubstance(text("konflik"), 4, 4) && hasNarrativeAction(text("konflik")) && !isFiller(text("konflik")), "Jelaskan hambatan spesifik dan bagaimana hambatan itu menghalangi tujuan tokoh; frasa umum seperti 'banyak masalah' belum cukup.", "konflik");
+  add("Konsekuensi kegagalan", hasSubstance(text("taruhan"), 4, 4) && /\b(jika|kalau|bila|akibat|sehingga|maka|akan)\b/i.test(text("taruhan")) && hasConcreteConsequence(text("taruhan")) && !isFiller(text("taruhan")), "Nyatakan akibat konkret jika tokoh gagal, bukan sekadar mengulang bahwa tokoh akan gagal atau 'banyak hal buruk terjadi'.", "taruhan");
  }else if(stageId === "logline"){
   const line = text("logline");
   const title = text("judulCerita");
   const titleIsGeneric = /^(cerita saya|judul|film|kisah|tanpa judul)$/i.test(title);
-  add("Judul kuat dan spesifik", title.length >= 3 && title.length <= 60 && !titleIsGeneric, "Pilih judul ringkas yang khas, memancing rasa ingin tahu, dan terkait dengan konflik atau ironi cerita.");
-  add("Ironi / paradoks", matches("logline", /\b(justru|padahal|tetapi|namun|meski|walau|ironis|berlawanan|kontras|sebaliknya)\b/i), "Tampilkan pertentangan yang menarik: misalnya kelebihan tokoh justru menjadi penghalang tujuannya. Indikator kata tidak dapat memastikan ironi secara makna.");
-  add("Gambaran mental yang konkret", matches("logline", /\b(di|ke|dari|menyelinap|berlari|menyembunyikan|mengejar|membangun|membongkar|menghapus|menyelamatkan|merekam|menukar|terjebak|panggung|sekolah|rumah|stasiun|studio|desa|kota|hutan|kapal|kamera|surat|rekaman|pintu|jembatan)\b/i), "Masukkan tempat, benda, atau aksi spesifik yang membuat pembaca bisa membayangkan satu gambar adegan.");
-  add("Target penonton jelas", has("targetPenonton", 5), "Sebutkan kelompok penonton yang terarah, bukan hanya 'semua orang'.");
-  add("Tokoh, tujuan, dan hambatan", line.length >= 35 && matches("logline", /\b(ingin|berusaha|harus|mencari|menyelamatkan|membuktikan|melarikan diri|mengungkap|merebut|memenangkan|mencegah)\b/i) && matches("logline", /\b(tetapi|namun|meski|walau|sebelum|sementara|ketika|agar|demi|melawan|terancam|kehilangan|gagal)\b/i), "Pastikan satu kalimat menjelaskan siapa tokohnya, apa yang ia kejar, dan hambatan atau risiko yang menghadang.");
+  add("Judul kuat dan spesifik", title.length >= 3 && title.length <= 60 && !titleIsGeneric && hasSubstance(title, 2, 2) && !isFiller(title), "Pilih judul ringkas yang khas, bukan isian umum atau rangkaian kata acak, dan selaraskan dengan konflik cerita.", "judulCerita");
+  add("Ironi / paradoks", matches("logline", /\b(justru|padahal|ironis(?:nya)?|berlawanan|kontras|sebaliknya|bertolak belakang|kontradiksi)\b/i) && hasSubstance(line, 9, 8), "Tampilkan pertentangan yang menarik dan bangun kalimat dengan detail cerita. Kata penanda ironi di dalam kalimat acak belum cukup.", "logline");
+  add("Gambaran mental yang konkret", matches("logline", /\b(di|ke|dari|menyelinap|berlari|menyembunyikan|mengejar|membangun|membongkar|menghapus|menyelamatkan|merekam|menukar|terjebak|panggung|sekolah|rumah|stasiun|studio|desa|kota|hutan|kapal|kamera|surat|rekaman|pintu|jembatan)\b/i) && hasSubstance(line, 9, 8), "Masukkan aksi, tempat, atau benda yang spesifik dan benar-benar terkait dengan cerita.", "logline");
+  add("Target penonton jelas", hasSubstance(text("targetPenonton"), 3, 3) && /\b(remaja|anak|dewasa|keluarga|penonton|usia|tahun|penggemar|penyuka|siswa|mahasiswa)\b/i.test(text("targetPenonton")) && !isFiller(text("targetPenonton")), "Sebutkan kelompok penonton dan cirinya, misalnya rentang usia serta minat genre.", "targetPenonton");
+  add("Tokoh, tujuan, dan hambatan", hasSubstance(line, 9, 8) && hasSpecificGoal(line) && matches("logline", /\b(tetapi|namun|meski|walau|sebelum|sementara|ketika|agar|demi|melawan|terancam|kehilangan|gagal)\b/i) && !isFiller(line), "Pastikan kalimat yang sama menjelaskan tokoh spesifik, tujuan konkret, dan hambatan atau risiko yang berhubungan—bukan hanya memuat kata pemicu.", "logline");
  }else if(stageId === "sinopsis"){
   const synopsis = text("sinopsis");
   const words = synopsis.split(/\s+/).filter(Boolean).length;
@@ -547,6 +560,30 @@ function getStageReview(stageId, answers){
  return checks;
 }
 
+function updateInlineFeedback(stage, checks){
+ if(!["ide","premis","logline"].includes(stage.id)) return;
+ document.querySelectorAll(".question[data-field]").forEach(question=>{
+  const field=question.dataset.field;
+  const failed=checks.filter(check=>check.field===field&&!check.passed);
+  const control=question.querySelector("input, textarea, select");
+  const previousNote=question.querySelector(".field-feedback");
+  if(previousNote) previousNote.remove();
+  question.classList.toggle("has-error",failed.length>0);
+  if(failed.length){
+   control.setAttribute("aria-invalid","true");
+   const note=document.createElement("small");
+   note.className="field-feedback";
+   note.id=`${field}-feedback`;
+   note.textContent=failed.map(check=>`${check.label}: ${check.advice}`).join(" ");
+   control.setAttribute("aria-describedby",note.id);
+   question.appendChild(note);
+  }else{
+   control.removeAttribute("aria-invalid");
+   control.removeAttribute("aria-describedby");
+  }
+ });
+}
+
 function feedback(){
  const stage = stages[state.current];
  const checks = getStageReview(stage.id, state.answers);
@@ -557,15 +594,19 @@ function feedback(){
  document.getElementById("feedback").innerHTML = `
   <div class="feedback-heading"><div><strong>Koreksi Otomatis · ${stage.title}</strong><span>${passed} dari ${checks.length} indikator terdeteksi</span></div><b>${percent}%</b></div>
   <ul class="feedback-checklist">${checks.map(check => `<li class="${check.passed ? "is-passed" : "is-missing"}"><span aria-hidden="true">${check.passed ? "✓" : "!"}</span><div><strong>${check.label}</strong>${check.passed ? "" : `<small>${check.advice}</small>`}</div></li>`).join("")}</ul>
-  <p class="feedback-next">${firstMissing ? `<strong>Prioritas revisi:</strong> ${firstMissing.advice}` : "Semua indikator awal terdeteksi. Baca ulang untuk memastikan hubungan sebab-akibat dan makna cerita benar-benar kuat."}</p>
-  <p class="feedback-note">Skor menunjukkan kelengkapan indikator tulisan, bukan penilaian final atas mutu cerita. Tinjau ulang bersama guru.</p>
+  <p class="feedback-next">${firstMissing ? `<strong>Prioritas revisi:</strong> ${firstMissing.advice}` : "Semua indikator awal lolos. Baca ulang untuk memastikan hubungan sebab-akibat dan makna cerita benar-benar kuat."}</p>
+  <p class="feedback-note">Pemeriksaan awal ini memakai pola dan keragaman kata; aplikasi belum memahami makna cerita seperti pembaca/guru. Tanda lolos bukan jaminan isi cerita sudah benar.</p>
   ${sourceNote}`;
+ updateInlineFeedback(stage, checks);
 }
 function goStage(i){state.current=i;save();renderStages();renderForm();document.getElementById("workspace").scrollIntoView({behavior:"smooth"});}
 document.getElementById("prevBtn").onclick=()=>goStage(Math.max(0,state.current-1));
 document.getElementById("nextBtn").onclick=()=>{
  const s=stages[state.current]; s.questions.forEach(q=>{const el=document.getElementById(q[0]);state.answers[q[0]]=el.value;});
- state.completed[s.id]=s.questions.every(q=>(state.answers[q[0]]||"").trim().length>0);
+ const reviewChecks=getStageReview(s.id,state.answers);
+ state.completed[s.id]=["ide","premis","logline"].includes(s.id)
+  ? reviewChecks.every(check=>check.passed)
+  : s.questions.every(q=>(state.answers[q[0]]||"").trim().length>0);
  if(state.current<stages.length-1) state.current++; save();renderStages();renderForm();updateStats();
  document.getElementById("workspace").scrollIntoView({behavior:"smooth"});
 };
