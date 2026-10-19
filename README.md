@@ -5,16 +5,20 @@ SCRIPT LAB adalah web app pembelajaran berbasis HTML, CSS, dan JavaScript untuk 
 
 ### Fitur
 - Script Journey: Ide → Premis → Logline → Sinopsis → Karakter → Alur → Scene → Dialog → Screenplay
+- Tahap Logline mencakup ironi/hal tak terduga, gambaran visual, judul menarik, satu kalimat logline, dan target penonton
+- Materi modul Naskah Film bertahap dari ide cerita, premis, logline, sinopsis, karakter, alur, hingga struktur tiga babak, dengan contoh cerita dan latihan pada setiap tahap
 - Form penulisan interaktif
 - Penyimpanan otomatis menggunakan localStorage
 - Progress dashboard
 - Ulasan AI untuk ide cerita, premis, dan logline: menilai makna, konsistensi, dan hubungan sebab-akibat; kolom yang perlu direvisi ditandai merah dengan pertanyaan pemandu
 - AI berfungsi sebagai pendamping belajar: memberi feedback dan pertanyaan revisi pada ide cerita, premis, dan logline; siswa tetap bebas membuka dan melanjutkan ke tahap mana pun
+- Latihan mandiri berupa 4 kuis pilihan ganda tentang format naskah, pengembangan cerita, screenplay, dan produksi; jawaban tersimpan, dapat dinilai, dan dilengkapi pembahasan
 - Producer Challenge acak
 - Export portfolio siswa menjadi TXT
 - Login siswa individu (nama + nomor absen), akun kerja kelompok (nama kelompok + nama anggota + PIN sederhana), dan guru
 - Satu ruang kerja bersama per kelompok; hasil kerja individu dan kelompok dipantau terpisah di dashboard guru
 - Dashboard guru menampilkan anggota kelompok serta mendukung ekspor portfolio individu/kelompok
+- Dashboard guru menampilkan penilaian kuis pilihan ganda secara terpisah, termasuk nilai per kuis, nilai keseluruhan, jawaban siswa, dan kunci jawaban untuk kuis yang sudah dikumpulkan
 - Aplikasi tetap dapat dibuka sebagai file lokal; fitur AI dan sinkronisasi memerlukan internet
 
 ### Cara menjalankan
@@ -29,7 +33,7 @@ Website dapat dibuka sebagai file lokal, tetapi penyimpanan bersama dan ulasan A
 ### Login demo
  
 ### Supabase
-Jalankan seluruh `supabase-schema.sql` melalui **Supabase → SQL Editor** setelah perubahan. Skema ini menambahkan penyimpanan jenis akun, anggota kelompok, progres praktik, dan fungsi RPC untuk membuat/memeriksa PIN kelompok. Kelompok cukup mengisi nama kelompok, 2–12 nama anggota (satu nama per baris), dan PIN minimal 4 karakter yang mudah diingat, misalnya `1234`. PIN disimpan sebagai hash; setelah 10 percobaan gagal, login akun kelompok dikunci selama 15 menit. Gunakan nama dan PIN yang sama setiap kali masuk; daftar anggota dapat diperbarui saat login. Semua anggota kelompok memakai satu progres/naskah bersama. Guru melihat akun individu dan kelompok secara terpisah di dashboard serta dapat membuka portfolio masing-masing.
+Jalankan seluruh `supabase-schema.sql` melalui **Supabase → SQL Editor** setelah perubahan. Skema ini menambahkan penyimpanan jenis akun, anggota kelompok, progres praktik, dan fungsi RPC untuk membuat/memeriksa PIN kelompok. Kelompok cukup mengisi nama kelompok, 1–15 nama anggota (satu nama per baris), dan PIN minimal 4 karakter yang mudah diingat, misalnya `1234`. PIN disimpan sebagai hash; setelah 10 percobaan gagal, login akun kelompok dikunci selama 15 menit. Gunakan nama dan PIN yang sama setiap kali masuk; daftar anggota dapat diperbarui saat login. Semua anggota kelompok memakai satu progres/naskah bersama. Guru melihat akun individu dan kelompok secara terpisah di dashboard serta dapat membuka portfolio masing-masing.
 
 Jika login kelompok menampilkan “fungsi login kelompok belum ditemukan”, jalankan ulang skema terbaru di SQL Editor. Jika aplikasi menyebut alamat Supabase tidak dapat dijangkau, cocokkan `SUPABASE_URL` di `script.js` dengan **Project URL** aktif pada pengaturan API proyek Supabase. Live Server tidak dapat memperbaiki URL proyek yang salah atau sudah tidak aktif.
 

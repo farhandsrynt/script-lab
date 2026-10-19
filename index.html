@@ -7,16 +7,20 @@
 <title>SCRIPT LAB | Broadcasting × Film × Education</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=DM+Sans:wght@400;500;600;700&family=Nunito+Sans:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body class="locked">
 <div class="noise"></div>
 <div class="auth-screen" id="authScreen">
-  <div class="auth-card">
-    <p class="eyebrow">SCRIPT LAB / RUANG BELAJAR</p>
-    <h1>Masuk ke<br><em>ruangmu.</em></h1>
-    <p class="auth-lead">Siswa individu dan kelompok menyusun naskah. Guru memantau hasil kerja dari satu dashboard.</p>
+  <div class="auth-card role-student" id="authCard">
+    <p class="eyebrow" id="loginEyebrow">SCRIPT LAB / SISWA INDIVIDU</p>
+    <h1><span id="loginTitleMain">Mulai</span><br><em id="loginTitleAccent">menulis.</em></h1>
+    <p class="auth-lead" id="loginLead">Masuk dengan nama dan nomor absen untuk melanjutkan perjalanan menulis naskahmu.</p>
+    <div class="auth-studio-strip" aria-hidden="true">
+      <div class="auth-mini-clapper"><span class="clapper-top"></span><span class="clapper-body"><b>SCENE 01</b><strong>TAKE 01</strong></span></div>
+      <div class="auth-live-signal"><span class="auth-on-air"><i></i> ON AIR</span><span class="auth-waveform"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="auth-signal-label">SCRIPT LAB · LIVE</span></div>
+    </div>
     <form id="loginForm">
       <label for="loginRole">Masuk sebagai</label>
       <select id="loginRole"><option value="student">Siswa individu</option><option value="group">Siswa kelompok</option><option value="teacher">Guru</option></select>
@@ -29,7 +33,7 @@
       <div id="groupMembersField" hidden>
         <label for="groupMembers">Nama anggota kelompok</label>
         <textarea id="groupMembers" rows="4" placeholder="Tulis satu nama anggota per baris"></textarea>
-        <small>Masukkan 2–12 nama anggota, satu nama per baris.</small>
+        <small>Masukkan 1–15 nama anggota, satu nama per baris.</small>
       </div>
       <div id="passwordField">
         <label for="loginPassword" id="passwordLabel">Password</label>
@@ -58,7 +62,7 @@
     <div class="actions"><a class="primary-btn" href="#journey">Jelajahi tahap cerita <span>→</span></a><button class="secondary-btn" id="exportTop">Ekspor progres</button></div>
   </div>
   <div class="hero-card">
-    <div class="screen-top"><span></span><span></span><span></span><b>LIVE WRITING ROOM</b></div>
+    <div class="screen-top"><span></span><span></span><span></span><b>LIVE WRITING ROOM</b><span class="audio-meter" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></div>
     <div class="mini-scene">
       <span class="scene-tag">INT. RUANG EDIT — MALAM</span>
       <p>Rekaman terakhir berhenti tepat sebelum rahasia itu terbongkar.</p>
@@ -100,7 +104,7 @@
 </section>
 
 <section id="practice" class="section practice-section">
-  <div class="section-heading"><div><p class="eyebrow">03 / PRAKTIK MANDIRI</p><h2>Latihan harianmu.</h2></div><p class="section-note">Tingkatkan kemampuan menulis naskah lewat tugas singkat yang bisa dikerjakan secara mandiri di setiap sesi belajar.</p></div>
+  <div class="section-heading"><div><p class="eyebrow">03 / LATIHAN MANDIRI</p><h2>Uji pemahamanmu.</h2></div><p class="section-note">Jawab kuis berdasarkan materi format program dan pengembangan naskah. Pilih satu jawaban pada setiap soal, lalu kumpulkan untuk melihat skor dan pembahasannya.</p></div>
   <div id="practicePanel" class="practice-panel"></div>
 </section>
 
@@ -115,11 +119,16 @@
 </section>
 
 <section id="teacher" class="section teacher-section">
-  <div class="section-heading"><div><p class="eyebrow">05 / TEACHER DASHBOARD</p><h2>Progress kelas.</h2></div><p class="section-note">Dashboard lokal sederhana untuk membantu guru melihat progres perangkat ini.</p></div>
+  <div class="section-heading"><div><p class="eyebrow">05 / TEACHER DASHBOARD</p><h2>Progress kelas.</h2></div><p class="section-note">Pantau portfolio dan penilaian kuis siswa individu maupun kelompok.</p></div>
   <div class="stats" id="stats"></div>
   <div class="teacher-grid">
     <div class="panel"><h3>Rubrik cepat</h3><div class="rubric"><label>Ide & Premis <b>20%</b></label><div class="bar"><i style="width:20%"></i></div><label>Struktur Cerita <b>25%</b></label><div class="bar"><i style="width:25%"></i></div><label>Karakter & Konflik <b>20%</b></label><div class="bar"><i style="width:20%"></i></div><label>Format Naskah <b>20%</b></label><div class="bar"><i style="width:20%"></i></div><label>Kelayakan Produksi <b>15%</b></label><div class="bar"><i style="width:15%"></i></div></div></div>
-    <div class="panel"><h3>Portfolio siswa & kelompok</h3><p>Hasil kerja individu dan kelompok yang tersimpan melalui akun masing-masing.</p><p id="dashboardStatus" class="dashboard-status" role="status"></p><div id="studentSubmissions" class="submission-list"></div><select id="portfolioStudent" class="portfolio-select"><option value="">Pilih siswa atau kelompok untuk dibuatkan portfolio</option></select><div class="teacher-actions"><button class="primary-btn" id="exportBtn">Buka Portfolio & PDF</button><button class="secondary-btn" id="copyBtn">Salin Ringkasan</button><button class="danger-btn" id="deleteStudentBtn">Hapus Data</button></div><div id="copyMessage"></div></div>
+    <div class="panel"><h3>Portfolio siswa & kelompok</h3><p>Hasil kerja individu dan kelompok yang tersimpan melalui akun masing-masing.</p><p id="dashboardStatus" class="dashboard-status" role="status"></p><section class="submission-section"><h4>Siswa individu</h4><div id="individualSubmissions" class="submission-list"></div></section><section class="submission-section"><h4>Siswa kelompok</h4><div id="groupSubmissions" class="submission-list"></div></section><select id="portfolioStudent" class="portfolio-select"><option value="">Pilih siswa atau kelompok untuk dibuatkan portfolio</option></select><div class="teacher-actions"><button class="primary-btn" id="exportBtn">Buka Portfolio & PDF</button><button class="secondary-btn" id="copyBtn">Salin Ringkasan</button><button class="danger-btn" id="deleteStudentBtn">Hapus Data</button></div><div id="copyMessage"></div></div>
+  </div>
+  <div class="panel assessment-panel">
+    <div class="assessment-heading"><div><h3>Penilaian kuis pilihan ganda</h3><p>Rekap nilai otomatis berdasarkan jawaban yang sudah dikumpulkan. Siswa individu dan kelompok ditampilkan terpisah dari portfolio.</p></div><button class="secondary-btn" id="refreshSubmissionsBtn" type="button">Muat ulang data</button></div>
+    <p class="assessment-note">Nilai keseluruhan dihitung dari kuis yang sudah dikumpulkan. Buka detail untuk melihat jawaban siswa dan kunci jawaban.</p>
+    <div id="assessmentList" class="assessment-list" aria-live="polite"></div>
   </div>
 </section>
 </main>

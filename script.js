@@ -13,9 +13,11 @@ const stages = [
   ["taruhan","Apa yang dipertaruhkan?","Jelaskan konsekuensi jika tokoh gagal.","textarea"]
  ]},
  {id:"logline", title:"Logline", desc:"Buat satu kalimat yang membuat orang ingin mengetahui ceritanya.", questions:[
-  ["judulCerita","Judul sementara","Pilih judul yang spesifik, menarik, dan selaras dengan cerita.","text"],
-  ["logline","Tulis logline ceritamu","Satu kalimat: tokoh + tujuan + konflik + taruhan. Tampilkan paradoks/ironi dan gambaran yang bisa dibayangkan.","textarea"],
-  ["targetPenonton","Siapa target penontonnya?","Sebutkan kelompok penonton yang spesifik, misalnya remaja 15–18 tahun penyuka drama sekolah.","text"]
+  ["ironiCerita","Ironi / hal tak terduga","Apa pertentangan menarik dalam ceritamu? Pikirkan hal yang seharusnya terjadi dibandingkan dengan kenyataannya.","textarea"],
+  ["gambaranVisual","Gambaran visual","Adegan atau gambar apa yang langsung terbayang dari ceritamu? Jelaskan aksi, tempat, atau benda yang bisa dilihat kamera.","textarea"],
+  ["judulMenarik","Judul yang menarik","Buat judul yang singkat, khas, dan membuat target penonton ingin tahu ceritanya.","text"],
+  ["targetPenonton","Siapa target penontonnya?","Sebutkan kelompok penonton yang spesifik, misalnya remaja 15–18 tahun penyuka drama sekolah.","text"],
+  ["logline","Tulis logline ceritamu","Satu kalimat: tokoh + tujuan + konflik + taruhan. Masukkan ironi/hal tak terduga dan gambaran visual yang kuat.","textarea"]
  ]},
  {id:"sinopsis", title:"Sinopsis", desc:"Kembangkan logline menjadi gambaran cerita yang utuh.", questions:[
   ["sinopsis","Sinopsis 1–3 paragraf","Ceritakan awal, perkembangan konflik, dan arah penyelesaian.","textarea"]
@@ -109,7 +111,16 @@ const formatModules = {
   purpose:"Dokumen kerja yang menerjemahkan cerita menjadi rangkaian adegan visual dan audio sebagai acuan sutradara, pemain, serta kru produksi.",
   elements:[["Scene heading","Penanda INT./EXT., lokasi, dan waktu adegan."],["Deskripsi aksi","Peristiwa yang dapat dilihat atau didengar; ditulis ringkas dalam waktu kini."],["Nama tokoh dan dialog","Identitas pembicara dan ucapan yang dimainkan."],["Petunjuk seperlunya","Arah penting bagi pembacaan atau suara tanpa menggantikan keputusan sutradara."],["Urutan dramatik","Rangkaian adegan yang mengembangkan tujuan, hambatan, dan perubahan cerita."]],
   flow:["Kembangkan ide melalui premis, logline, dan sinopsis.","Susun urutan adegan sebelum menulis halaman demi halaman.","Gunakan format heading, aksi, nama tokoh, dan dialog secara konsisten.","Baca ulang untuk memeriksa alur, visual, kesinambungan, dan kebutuhan produksi."],
-  notes:["Tulis hal yang bisa dilihat atau didengar kamera.","Jaga deskripsi aksi tetap jelas, ringkas, dan mudah diproduksi.","Periksa konsistensi nama tokoh, lokasi, waktu, dan properti."]
+  notes:["Tulis hal yang bisa dilihat atau didengar kamera.","Jaga deskripsi aksi tetap jelas, ringkas, dan mudah diproduksi.","Periksa konsistensi nama tokoh, lokasi, waktu, dan properti."],
+  learningPath:[
+   {title:"1. Ide cerita: temukan benih cerita",description:"Ide adalah bahan awal, belum harus menjadi cerita lengkap. Mulailah dari tokoh, keadaan menarik, masalah, atau pertanyaan “bagaimana jika?”. Cari kemungkinan perubahan dan konflik yang dapat terlihat di layar.",example:"Bagaimana jika arsip siaran radio sekolah akan dihapus, sementara seorang siswa ingin membuktikan bahwa suara-suara di dalamnya penting bagi komunitas sekolah?",task:"Tulis satu kalimat tentang hal yang membuatmu penasaran. Tambahkan siapa yang terdampak dan masalah apa yang mungkin muncul."},
+   {title:"2. Premis: rumuskan inti cerita",description:"Premis memadatkan hubungan tokoh, tujuan, hambatan, dan akibat menjadi dasar cerita. Premis membantu penulis mengecek apakah bahan awal memiliki konflik yang cukup untuk dikembangkan.",example:"Raka, anggota radio sekolah yang pemalu, berusaha menyelamatkan arsip siaran sebelum server dibersihkan, tetapi ia harus menemukan cara meyakinkan kepala sekolah tanpa menyiarkan rekaman pribadi tanpa izin.",task:"Isi pola: “Tokoh ___ ingin ___, tetapi ___ menghalanginya; jika gagal, ___.” Pastikan hambatan dan akibatnya spesifik."},
+   {title:"3. Logline: ceritakan daya tariknya dalam satu kalimat",description:"Logline adalah ringkasan sangat singkat untuk memperkenalkan cerita. Umumnya mencantumkan tokoh utama, pemicu atau situasi, tujuan, hambatan utama, dan taruhan. Logline bukan slogan dan tidak perlu menceritakan semua akhir cerita.",example:"Saat arsip radio sekolah terancam dihapus sebelum bel pulang, Raka yang pemalu harus merekam suara baru dan meyakinkan kepala sekolah agar menyimpannya, tanpa membocorkan pesan pribadi yang ia temukan di rekaman lama.",task:"Tulis satu kalimat. Garisbawahi tokoh, tujuan, hambatan, dan taruhan; hapus detail yang tidak mendorong konflik."},
+   {title:"4. Sinopsis: uraikan perjalanan cerita",description:"Sinopsis menceritakan cerita secara berurutan dalam bentuk prosa. Berbeda dengan logline, sinopsis mencakup perkembangan konflik, keputusan penting, klimaks, dan penyelesaian. Untuk latihan, buat satu sampai tiga paragraf dengan sebab-akibat yang jelas.",example:"Raka mengetahui arsip radio sekolah akan terhapus saat server dibersihkan sore itu. Ia ingin menyelamatkannya, tetapi kepala sekolah meminta bukti bahwa arsip tersebut layak disimpan. Saat memilah rekaman lama, Raka menemukan pesan pribadi seorang siswa dan sadar bahwa pesan itu tidak boleh dipakai tanpa izin.\n\nRaka mengajak teman-temannya merekam suara dan cerita baru dari warga sekolah. Ketika alat rekam bermasalah dan waktu hampir habis, ia harus memilih: memakai pesan pribadi sebagai jalan pintas atau menyampaikan gagasannya sendiri. Raka memilih berbicara langsung dan memutar rekaman baru yang dibuat dengan persetujuan. Kepala sekolah menyetujui penyimpanan arsip sebagai proyek uji coba; Raka pun berani menjadi penyiar untuk pertama kalinya.",task:"Tulis awal, perkembangan, klimaks, dan akhir. Pastikan tindakan tokoh menyebabkan peristiwa berikutnya dan akhir menjawab konflik utama."},
+   {title:"5. Karakter: bangun tokoh yang memilih dan berubah",description:"Karakter bukan hanya nama dan sifat. Kenali keinginan luar yang bisa diamati, kebutuhan batin, kekuatan, kelemahan, ketakutan, hubungan dengan tokoh lain, serta pilihan yang mengubah dirinya. Perubahan sebaiknya tampak melalui tindakan, bukan hanya dijelaskan.",example:"Raka ingin menyelamatkan arsip (keinginan luar). Ia perlu belajar menyuarakan pendapat dan menghormati privasi orang lain (kebutuhan). Ia teliti dalam mengedit audio, tetapi takut berbicara di depan orang. Pada klimaks, ia menolak memakai pesan pribadi tanpa izin dan memilih menyampaikan idenya sendiri.",task:"Buat profil tokoh utama dengan: tujuan, kebutuhan, kekuatan, kelemahan, ketakutan, dan keputusan yang menunjukkan perubahan."},
+   {title:"6. Alur: susun sebab, akibat, dan pilihan",description:"Alur adalah urutan peristiwa yang saling mendorong. Rangkaikan pemicu, usaha tokoh, hambatan yang meningkat, titik balik, krisis, klimaks, dan akibat. Tiap adegan sebaiknya mengubah informasi, hubungan, atau keadaan.",example:"Arsip akan dihapus → Raka meminta bantuan dan ditolak karena belum punya bukti → ia menemukan rekaman pribadi yang bisa menjadi bukti tetapi bermasalah secara etis → alat rekam rusak dan waktu menipis → ia mengajak komunitas membuat rekaman baru → ia menyampaikan proposal dan memutar hasilnya → arsip disimpan sebagai uji coba.",task:"Tulis 6–10 peristiwa. Hubungkan dengan kata “karena itu” atau “tetapi”; jika hanya “lalu”, cari hubungan sebab-akibat yang lebih kuat."},
+   {title:"7. Struktur tiga babak: atur perubahan besar cerita",description:"Struktur tiga babak adalah peta untuk mengatur awal, konfrontasi, dan penyelesaian. Ini alat bantu, bukan rumus wajib: durasi tiap babak dapat berubah, terutama dalam film pendek. Titik balik ialah keputusan atau peristiwa yang mengubah arah usaha tokoh.",example:"BABAK I — Pengenalan dan pemicu: kita mengenal Raka dan radio sekolah; ia mengetahui arsip akan dihapus sore itu. Titik balik I: ia memutuskan mengumpulkan bukti dan menyelamatkan arsip.\n\nBABAK II — Konfrontasi: Raka mencoba meminta dukungan, menghadapi batas waktu, dan menemukan pesan pribadi. Titik tengah: ia sadar bukti yang mudah dipakai justru melanggar privasi. Krisis: alat bermasalah dan waktu hampir habis. Titik balik II: ia memilih membuat rekaman baru dengan persetujuan warga sekolah.\n\nBABAK III — Klimaks dan resolusi: Raka mempresentasikan rekaman serta proposalnya langsung kepada kepala sekolah. Ia mendapat persetujuan uji coba dan berani memandu siaran pertama.",task:"Bagi peristiwa ceritamu menjadi Babak I (dunia awal dan pemicu), Babak II (usaha, hambatan, pilihan sulit), dan Babak III (klimaks serta akibat). Pastikan tokoh membuat pilihan penting di setiap bagian."}
+  ]
  }
 };
 
@@ -299,10 +310,34 @@ FADE OUT.`,
 let selectedFormatIndex = 0;
 
 const practiceTasks=[
- {id:"logline",title:"Buat 3 Logline",label:"PRAKTIK 1",duration:"15 menit",objective:"Tulis tiga ide cerita dalam satu kalimat dengan tujuan, konflik, dan taruhan yang jelas.",steps:["Pilih satu tema yang paling kamu minati.","Buat 3 logline dengan pola tokoh + tujuan + konflik.","Pilih logline yang paling kuat lalu revisi ulang."],difficulty:"Pemula"},
- {id:"scene",title:"Kembangkan 3 Scene Utama",label:"PRAKTIK 2",duration:"20 menit",objective:"Ubah ide menjadi adegan yang bisa dilihat dan dipahami penonton.",steps:["Tuliskan 3 scene utama.","Tentukan lokasi dan waktu masing-masing scene.","Tambahkan aksi utama yang mendorong konflik."],difficulty:"Menengah"},
- {id:"dialog",title:"Tulis Dialog Singkat",label:"PRAKTIK 3",duration:"18 menit",objective:"Latih dialog yang natural, jelas, dan punya subteks.",steps:["Buat 2 tokoh dengan tujuan berlawanan.","Tulis 6–8 baris dialog.","Tambahkan subteks di balik percakapan."],difficulty:"Menengah"},
- {id:"storyboard",title:"Storyboard Sederhana",label:"PRAKTIK 4",duration:"25 menit",objective:"Visualisasikan cerita kamu dalam 4 panel utama agar mudah diproduksi.",steps:["Buat 4 panel.","Setiap panel harus berisi aksi, lokasi, dan emosi.","Cek alur dari awal sampai klimaks."],difficulty:"Lanjut"}
+ {id:"format",title:"Mengenal Format Naskah",label:"KUIS 1",topic:"Berita, talk show, dokumenter, variety show, dan media sosial",questions:[
+  {id:"lead",prompt:"Bagian naskah berita yang menyampaikan inti peristiwa paling penting disebut …",choices:["Cue","Lead","Closing","Transisi"],answer:1,explanation:"Lead membuka berita dengan inti peristiwa agar penonton segera memahami informasi utamanya."},
+  {id:"talkshow",prompt:"Pertanyaan yang baik untuk narasumber talk show sebaiknya …",choices:["Menggiring narasumber agar setuju dengan host","Terbuka dan memberi ruang untuk jawaban spontan","Hanya dijawab dengan ya atau tidak","Tidak berhubungan dengan topik"],answer:1,explanation:"Pertanyaan terbuka membantu percakapan lebih informatif dan memberi ruang pada jawaban narasumber."},
+  {id:"documentary",prompt:"Hal yang harus dilakukan saat menggunakan kutipan atau gambar dalam dokumenter adalah …",choices:["Mengubah konteks supaya lebih dramatis","Memastikan sumber dan konteksnya dapat dipertanggungjawabkan","Menghilangkan semua informasi sumber","Menganggap semua materi internet bebas digunakan"],answer:1,explanation:"Dokumenter perlu menjaga konteks fakta, mencatat sumber, dan meminta izin untuk materi yang digunakan."},
+  {id:"cue",prompt:"Dalam naskah variety show, cue digunakan untuk …",choices:["Memberi petunjuk teknis kepada kru dan talent","Menggantikan semua dialog host","Menentukan konflik tokoh utama","Menuliskan opini penonton"],answer:0,explanation:"Cue adalah petunjuk eksekusi, misalnya untuk audio, visual, lampu, kamera, atau kesiapan talent."},
+  {id:"hook",prompt:"Bagian awal konten media sosial yang menarik perhatian penonton disebut …",choices:["Scene heading","Hook","Closing credit","Atribusi"],answer:1,explanation:"Hook adalah pembuka singkat dan relevan yang membuat penonton tertarik menyimak."}
+ ]},
+ {id:"story",title:"Membangun Cerita",label:"KUIS 2",topic:"Ide, tokoh, tujuan, konflik, logline, dan perubahan",questions:[
+  {id:"conflict",prompt:"Konflik dalam cerita adalah …",choices:["Daftar semua tokoh dalam cerita","Hambatan yang membuat tujuan tokoh sulit dicapai","Pesan penutup dari pembuat film","Deskripsi lokasi tanpa peristiwa"],answer:1,explanation:"Konflik menghadirkan hambatan yang mendorong tokoh mengambil tindakan dan membuat cerita bergerak."},
+  {id:"logline",prompt:"Unsur inti yang sebaiknya tampak dalam logline adalah …",choices:["Tokoh, tujuan, konflik, dan taruhan","Daftar kru dan anggaran","Semua dialog dari awal sampai akhir","Ulasan penonton"],answer:0,explanation:"Logline merangkum tokoh, apa yang ingin dicapai, hambatan, dan konsekuensi atau taruhan."},
+  {id:"stakes",prompt:"Dalam cerita, “taruhan” menjelaskan …",choices:["Lokasi tempat cerita dibuat","Apa akibatnya jika tokoh gagal","Jumlah adegan dalam film","Peralatan yang digunakan kru"],answer:1,explanation:"Taruhan memperjelas konsekuensi yang dihadapi tokoh jika ia tidak berhasil."},
+  {id:"change",prompt:"Akhir cerita terasa sebagai perubahan ketika …",choices:["Tokoh mengalami konsekuensi dari pilihan dan tindakannya","Semua masalah selesai tanpa sebab","Cerita berpindah lokasi secara acak","Tokoh baru muncul tanpa fungsi"],answer:0,explanation:"Perubahan tokoh sebaiknya tumbuh dari pilihan, tindakan, dan konsekuensi yang dibangun sepanjang cerita."},
+  {id:"scene-change",prompt:"Sebuah adegan akan terasa bermakna jika …",choices:["Keadaan, informasi, atau hubungan berubah","Hanya mengulang informasi sebelumnya","Tidak berkaitan dengan tujuan tokoh","Selalu memiliki banyak tokoh"],answer:0,explanation:"Adegan yang efektif mengubah informasi, hubungan, atau keadaan cerita."}
+ ]},
+ {id:"screenplay",title:"Adegan dan Format Film",label:"KUIS 3",topic:"Scene heading, aksi visual, dialog, dan urutan dramatik",questions:[
+  {id:"heading",prompt:"Penulisan “INT. RUANG KELAS - PAGI” menunjukkan …",choices:["Nama tokoh dan dialog","Interior, lokasi, dan waktu adegan","Jenis kamera dan lensa","Judul serta genre film"],answer:1,explanation:"Scene heading menandai interior atau eksterior, lokasi, dan waktu adegan."},
+  {id:"action",prompt:"Deskripsi aksi dalam naskah film sebaiknya berisi …",choices:["Pikiran tokoh yang tidak terlihat atau terdengar","Hal yang dapat dilihat atau didengar penonton","Penjelasan panjang tentang pesan moral","Instruksi untuk setiap gerakan kamera"],answer:1,explanation:"Aksi ditulis melalui peristiwa visual atau suara yang bisa diwujudkan saat produksi."},
+  {id:"dialog",prompt:"Dialog yang kuat biasanya …",choices:["Menjelaskan semua hal yang sudah terlihat","Memiliki tujuan atau konflik dan terdengar sesuai tokohnya","Selalu panjang agar halaman cepat penuh","Mengulang informasi yang sama"],answer:1,explanation:"Dialog sebaiknya punya fungsi, terasa alami, dan tidak sekadar menjelaskan yang sudah tampak."},
+  {id:"screenplay-order",prompt:"Sebelum menulis naskah film halaman demi halaman, penulis sebaiknya …",choices:["Menyusun urutan adegan terlebih dahulu","Memilih font poster film","Menulis credit title","Merekam semua dialog"],answer:0,explanation:"Menyusun urutan adegan membantu memastikan alur, perkembangan konflik, dan perubahan cerita."},
+  {id:"visual",prompt:"Kalimat aksi yang paling mudah divisualisasikan adalah …",choices:["Rani merasa sangat kehilangan harapan","Rani meremas surat itu lalu duduk sendiri di lantai","Rani memahami bahwa hidup itu rumit","Rani mempunyai masa lalu yang berat"],answer:1,explanation:"Aksi yang dapat difilmkan menjelaskan perilaku yang tampak, bukan hanya perasaan abstrak."}
+ ]},
+ {id:"production",title:"Produksi dan Penyampaian Pesan",label:"KUIS 4",topic:"Kelayakan produksi, target penonton, dan tanggung jawab media",questions:[
+  {id:"production-ready",prompt:"Cerita lebih layak diproduksi untuk tugas kelas jika …",choices:["Membutuhkan banyak lokasi yang tidak dapat diakses","Kebutuhan pemain, lokasi, dan properti sesuai sumber daya yang tersedia","Semua adegan harus memakai efek khusus","Jumlah tokoh terus ditambah"],answer:1,explanation:"Kelayakan produksi mempertimbangkan sumber daya nyata seperti pemain, lokasi, waktu, dan properti."},
+  {id:"audience",prompt:"Mengapa target penonton perlu ditentukan saat merancang program atau konten?",choices:["Agar pesan, gaya, dan pilihan format sesuai dengan penontonnya","Supaya naskah menjadi lebih panjang","Agar fakta dapat diubah sesuai selera","Supaya tidak perlu merencanakan visual"],answer:0,explanation:"Target penonton membantu menentukan bahasa, isi, gaya, dan format penyampaian."},
+  {id:"fact",prompt:"Saat membuat konten faktual, penulis harus …",choices:["Memeriksa sumber dan membedakan fakta dari opini","Memilih klaim paling mengejutkan tanpa bukti","Menghapus konteks kutipan","Menganggap informasi viral pasti benar"],answer:0,explanation:"Informasi faktual harus diperiksa dan disampaikan dengan konteks yang tidak menyesatkan."},
+  {id:"social-cta",prompt:"Fungsi ajakan bertindak (call to action) pada konten media sosial adalah …",choices:["Memberi langkah lanjutan yang jelas kepada penonton","Menggantikan pesan utama konten","Menyembunyikan sumber informasi","Menambah jumlah tokoh"],answer:0,explanation:"Ajakan bertindak memberi tahu penonton langkah relevan yang dapat mereka lakukan setelah melihat konten."},
+  {id:"variety-duration",prompt:"Mengapa total durasi segmen variety show perlu diperiksa?",choices:["Agar rundown dan waktu perpindahan panggung sesuai durasi acara","Agar semua segmen memiliki isi yang sama","Supaya cue tidak perlu ditulis","Agar host tidak perlu menutup acara"],answer:0,explanation:"Durasi tiap segmen dan perpindahan harus dihitung agar acara selesai sesuai waktu yang direncanakan."}
+ ]}
 ];
 
 const challenges=[
@@ -327,21 +362,43 @@ function renderChallenge(challenge){
 function renderPracticeBoard(){
  const panel=document.getElementById("practicePanel");
  if(!panel) return;
- const completedCount = practiceTasks.filter(task => Boolean(state.practice?.[task.id])).length;
+ const getRecord=taskId=>{
+  const record=state.practice?.[taskId];
+  if(!record||typeof record!=="object"||Array.isArray(record)) return {answers:{},submitted:false};
+  return {answers:record.answers&&typeof record.answers==="object"?record.answers:{},submitted:record.submitted===true};
+ };
+ const completedCount = practiceTasks.filter(task => getRecord(task.id).submitted).length;
  const percent = Math.round((completedCount / practiceTasks.length) * 100);
  const taskCards = practiceTasks.map(task => {
-  const done = Boolean(state.practice?.[task.id]);
-  return `<article class="practice-card ${done ? "done" : ""}">
+  const record=getRecord(task.id);
+  const answeredCount=task.questions.filter(question=>Number.isInteger(record.answers[question.id])).length;
+  const review=record.submitted?`<div class="quiz-review" aria-live="polite">
+    <strong>Hasil: ${task.questions.filter(question=>record.answers[question.id]===question.answer).length} dari ${task.questions.length} benar</strong>
+    ${task.questions.map((question,index)=>{
+     const correct=record.answers[question.id]===question.answer;
+     return `<p class="${correct?"quiz-correct":"quiz-incorrect"}"><b>${index+1}. ${correct?"Benar":"Belum tepat"}.</b> ${question.explanation}</p>`;
+    }).join("")}
+   </div>`:"";
+  return `<article class="practice-card ${record.submitted ? "done" : ""}">
     <div class="practice-card-head">
       <div>
         <span class="practice-chip">${task.label}</span>
         <h4>${task.title}</h4>
       </div>
-      <span class="practice-chip">${task.duration}</span>
+      <span class="practice-chip">${task.questions.length} soal</span>
     </div>
-    <p>${task.objective}</p>
-    <ul>${task.steps.map(step => `<li>${step}</li>`).join("")}</ul>
-    <button type="button" data-practice-id="${task.id}">${done ? "Selesai ✓" : "Mulai Praktik"}</button>
+    <p class="quiz-topic">${task.topic}</p>
+    <form class="practice-quiz" data-practice-form="${task.id}">
+      ${task.questions.map((question,index)=>`<fieldset class="quiz-question">
+        <legend>${index+1}. ${question.prompt}</legend>
+        <div class="quiz-choices">${question.choices.map((choice,choiceIndex)=>{
+         const inputId=`quiz-${task.id}-${question.id}-${choiceIndex}`;
+         return `<label for="${inputId}" class="quiz-choice"><input id="${inputId}" type="radio" name="${task.id}-${question.id}" value="${choiceIndex}" data-practice-answer="${task.id}:${question.id}" ${record.answers[question.id]===choiceIndex?"checked":""}><span>${choice}</span></label>`;
+        }).join("")}</div>
+       </fieldset>`).join("")}
+      <div class="quiz-submit-row"><span data-answered-count="${task.id}">${answeredCount} dari ${task.questions.length} dijawab${record.submitted?" · Sudah dikumpulkan":""}</span><button type="submit" data-practice-submit="${task.id}" ${answeredCount!==task.questions.length?"disabled":""}>${record.submitted?"Periksa Lagi":"Kumpulkan Jawaban"}</button></div>
+    </form>
+    ${review}
   </article>`;
  }).join("");
 
@@ -349,25 +406,44 @@ function renderPracticeBoard(){
   <div class="practice-summary">
     <div class="practice-summary-header">
       <div>
-        <p class="eyebrow">MISSION LAB</p>
+        <p class="eyebrow">KUIS PEMBELAJARAN</p>
         <h3>${percent}%</h3>
       </div>
-      <span class="summary-badge">Daily loop</span>
+      <span class="summary-badge">Latihan materi</span>
     </div>
     <div class="practice-bar"><i style="width:${percent}%"></i></div>
     <div class="practice-meta">
-      <div><strong>${completedCount}</strong><span>tugas selesai</span></div>
-      <div><strong>${practiceTasks.length}</strong><span>total misi</span></div>
-      <div><strong>${practiceTasks.filter(task => !state.practice?.[task.id]).length}</strong><span>tersisa</span></div>
+      <div><strong>${completedCount}</strong><span>kuis dikumpulkan</span></div>
+      <div><strong>${practiceTasks.length}</strong><span>total kuis</span></div>
+      <div><strong>${practiceTasks.length-completedCount}</strong><span>belum dikumpulkan</span></div>
     </div>
   </div>
   <div class="practice-list">${taskCards || '<p class="task-empty">Belum ada tugas.</p>'}</div>
  `;
 
- panel.querySelectorAll("[data-practice-id]").forEach(button => {
-  button.addEventListener("click", () => {
-   const id = button.getAttribute("data-practice-id");
-   state.practice = { ...(state.practice || {}), [id]: true };
+ panel.querySelectorAll("[data-practice-answer]").forEach(input=>{
+  input.addEventListener("change",()=>{
+   const [taskId,questionId]=input.dataset.practiceAnswer.split(":");
+   const record=getRecord(taskId);
+   state.practice={...(state.practice||{}),[taskId]:{answers:{...record.answers,[questionId]:Number(input.value)},submitted:false}};
+   const answeredCount=practiceTasks.find(task=>task.id===taskId).questions.filter(question=>Number.isInteger(state.practice[taskId].answers[question.id])).length;
+   const counter=panel.querySelector(`[data-answered-count="${taskId}"]`);
+   const submit=panel.querySelector(`[data-practice-submit="${taskId}"]`);
+   if(counter) counter.textContent=`${answeredCount} dari ${practiceTasks.find(task=>task.id===taskId).questions.length} dijawab`;
+   if(submit) submit.disabled=answeredCount!==practiceTasks.find(task=>task.id===taskId).questions.length;
+   const article=input.closest(".practice-card");
+   article?.querySelector(".quiz-review")?.remove();
+   save();
+  });
+ });
+ panel.querySelectorAll("[data-practice-form]").forEach(form=>{
+  form.addEventListener("submit",event=>{
+   event.preventDefault();
+   const taskId=form.dataset.practiceForm;
+   const task=practiceTasks.find(item=>item.id===taskId);
+   const record=getRecord(taskId);
+   if(!task||task.questions.some(question=>!Number.isInteger(record.answers[question.id]))) return;
+   state.practice={...(state.practice||{}),[taskId]:{answers:record.answers,submitted:true}};
    save();
    renderPracticeBoard();
    updateStats();
@@ -466,6 +542,19 @@ function renderFormatDetail(){
      <ul>${module.notes.map(note=>`<li>${esc(note)}</li>`).join("")}</ul>
     </section>
    </div>
+   ${module.learningPath?`<section class="module-learning-path" aria-labelledby="module-learning-title">
+    <div class="module-section-heading"><span>04</span><h3 id="module-learning-title">Dari ide hingga tiga babak</h3></div>
+    <p class="module-learning-intro">Ikuti langkah berikut secara berurutan. Contoh-contohnya memakai satu cerita yang sama agar terlihat bagaimana sebuah gagasan berkembang.</p>
+    <div class="module-learning-list">${module.learningPath.map((step,index)=>`<article class="module-learning-step">
+     <span class="module-learning-number">${String(index+1).padStart(2,"0")}</span>
+     <div class="module-learning-content">
+      <h4>${esc(step.title)}</h4>
+      <p>${esc(step.description)}</p>
+      <div class="module-learning-example"><strong>CONTOH CERITA</strong><p>${esc(step.example).replace(/\\n|\n/g,"<br>")}</p></div>
+      <div class="module-learning-task"><strong>COBA KERJAKAN</strong><p>${esc(step.task)}</p></div>
+     </div>
+    </article>`).join("")}</div>
+   </section>`:""}
   </div>
  </div>`;
 }
@@ -606,11 +695,13 @@ function getStageReview(stageId, answers){
   add("Konsekuensi kegagalan", hasSubstance(text("taruhan"), 4, 4) && /\b(jika|kalau|bila|akibat|sehingga|maka|akan)\b/i.test(text("taruhan")) && hasConcreteConsequence(text("taruhan")) && !isFiller(text("taruhan")), "Nyatakan akibat konkret jika tokoh gagal, bukan sekadar mengulang bahwa tokoh akan gagal atau 'banyak hal buruk terjadi'.", "taruhan");
  }else if(stageId === "logline"){
   const line = text("logline");
-  const title = text("judulCerita");
-  const titleIsGeneric = /^(cerita saya|judul|film|kisah|tanpa judul)$/i.test(title);
-  add("Judul kuat dan spesifik", title.length >= 3 && title.length <= 60 && !titleIsGeneric && hasSubstance(title, 2, 2) && !isFiller(title), "Pilih judul ringkas yang khas, bukan isian umum atau rangkaian kata acak, dan selaraskan dengan konflik cerita.", "judulCerita");
+  const irony = text("ironiCerita");
+  const visual = text("gambaranVisual");
+  const title = text("judulMenarik");
+  add("Ironi / hal tak terduga teridentifikasi", hasSubstance(irony, 5, 4) && !isFiller(irony), "Jelaskan pertentangan yang spesifik antara harapan atau keadaan awal dengan hal tak terduga yang terjadi.", "ironiCerita");
   add("Ironi / paradoks", matches("logline", /\b(justru|padahal|ironis(?:nya)?|berlawanan|kontras|sebaliknya|bertolak belakang|kontradiksi)\b/i) && hasSubstance(line, 9, 8), "Tampilkan pertentangan yang menarik dan bangun kalimat dengan detail cerita. Kata penanda ironi di dalam kalimat acak belum cukup.", "logline");
-  add("Gambaran mental yang konkret", matches("logline", /\b(di|ke|dari|menyelinap|berlari|menyembunyikan|mengejar|membangun|membongkar|menghapus|menyelamatkan|merekam|menukar|terjebak|panggung|sekolah|rumah|stasiun|studio|desa|kota|hutan|kapal|kamera|surat|rekaman|pintu|jembatan)\b/i) && hasSubstance(line, 9, 8), "Masukkan aksi, tempat, atau benda yang spesifik dan benar-benar terkait dengan cerita.", "logline");
+  add("Gambaran visual yang konkret", hasSubstance(visual, 5, 4) && matches("gambaranVisual", /\b(di|ke|dari|menyelinap|berlari|menyembunyikan|mengejar|membangun|membongkar|menghapus|menyelamatkan|merekam|menukar|terjebak|panggung|sekolah|rumah|stasiun|studio|desa|kota|hutan|kapal|kamera|surat|rekaman|pintu|jembatan)\b/i) && !isFiller(visual), "Jelaskan aksi visual beserta tempat atau benda yang spesifik dan dapat direkam kamera.", "gambaranVisual");
+  add("Judul menarik dan sesuai cerita", title.length >= 3 && title.length <= 60 && hasSubstance(title, 2, 2) && !/^(judul|film|kisah|cerita saya|tanpa judul)$/i.test(title) && !isFiller(title), "Buat judul ringkas dan khas yang selaras dengan konflik atau ironi cerita, bukan label umum.", "judulMenarik");
   add("Target penonton jelas", hasSubstance(text("targetPenonton"), 3, 3) && /\b(remaja|anak|dewasa|keluarga|penonton|usia|tahun|penggemar|penyuka|siswa|mahasiswa)\b/i.test(text("targetPenonton")) && !isFiller(text("targetPenonton")), "Sebutkan kelompok penonton dan cirinya, misalnya rentang usia serta minat genre.", "targetPenonton");
   add("Tokoh, tujuan, dan hambatan", hasSubstance(line, 9, 8) && hasSpecificGoal(line) && matches("logline", /\b(tetapi|namun|meski|walau|sebelum|sementara|ketika|agar|demi|melawan|terancam|kehilangan|gagal)\b/i) && !isFiller(line), "Pastikan kalimat yang sama menjelaskan tokoh spesifik, tujuan konkret, dan hambatan atau risiko yang berhubungan—bukan hanya memuat kata pemicu.", "logline");
  }else if(stageId === "sinopsis"){
@@ -851,7 +942,7 @@ document.getElementById("challengeBtn").onclick=()=>{
 function updateStats(){
  const total=stages.length, done=Object.values(state.completed).filter(Boolean).length;
  const percent=Math.round(done/total*100);document.getElementById("heroPercent").textContent=percent+"%";
- const practiceDone=Object.values(state.practice||{}).filter(Boolean).length;
+ const practiceDone=practiceTasks.filter(task=>state.practice?.[task.id]?.submitted===true).length;
  document.getElementById("stats").innerHTML=[["Progress",percent+"%","Tahap screenplay"],["Tahap selesai",done,"dari "+total],["Jawaban",Object.keys(state.answers).filter(k=>state.answers[k].trim()).length,"isian tersimpan"],["Praktik",`${practiceDone}/${practiceTasks.length}`,"latihan mandiri"]].map(x=>`<div class="stat"><strong>${x[1]}</strong><span>${x[0]} — ${x[2]}</span></div>`).join("");
  const studentProgress=document.getElementById("studentProgress");
  if(studentProgress) studentProgress.innerHTML=`<strong>${percent}%</strong><span>${done} dari ${total} tahap selesai</span><div class="student-progress-track"><i style="width:${percent}%"></i></div>`;
@@ -859,8 +950,10 @@ function updateStats(){
 
 async function renderSubmissions(){
  if(currentUser?.role!=="teacher") return;
- const submissions=document.getElementById("studentSubmissions");
- if(!submissions) return;
+ const individualSubmissions=document.getElementById("individualSubmissions");
+ const groupSubmissions=document.getElementById("groupSubmissions");
+ const assessmentList=document.getElementById("assessmentList");
+ if(!individualSubmissions||!groupSubmissions||!assessmentList) return;
  const dashboardStatus=document.getElementById("dashboardStatus");
  let students=Object.values(users).filter(user=>isLearner(user));
  try{
@@ -877,13 +970,53 @@ async function renderSubmissions(){
  }
  const studentSelect=document.getElementById("portfolioStudent");
  if(studentSelect) studentSelect.innerHTML=`<option value="">Pilih siswa atau kelompok untuk dibuatkan portfolio</option>`+students.map(user=>`<option value="${esc(user.username)}">${user.role==="group"?"Kelompok":"Siswa"}: ${esc(user.name||user.username)}${user.role==="group"?` · ${esc((user.members||[]).join(", "))}`:` · No. absen ${esc(user.absence||"-")}`}</option>`).join("");
- submissions.innerHTML=students.length?students.map(user=>{
+ const renderSubmission=user=>{
   const userState=user.state||defaultState(), done=Object.values(userState.completed||{}).filter(Boolean).length;
   const answers=Object.values(userState.answers||{}).filter(value=>String(value).trim()).length;
   const identity=user.role==="group"?`Kelompok · ${esc((user.members||[]).join(", ")||"Anggota belum dicatat")}`:`Siswa individu · No. absen ${esc(user.absence||"-")}`;
   return `<div class="submission ${user.role==="group"?"submission-group":""}"><div><strong>${esc(user.name||user.username)}</strong><small>${identity}</small></div><b>${Math.round(done/stages.length*100)}%</b><span>${answers} jawaban tersimpan</span></div>`;
- }).join(""):"<p class=\"empty-state\">Belum ada hasil siswa.</p>";
+ };
+ const individuals=students.filter(user=>user.role==="student");
+ const groups=students.filter(user=>user.role==="group");
+ individualSubmissions.innerHTML=individuals.length?individuals.map(renderSubmission).join(""):"<p class=\"empty-state\">Belum ada hasil siswa individu.</p>";
+ groupSubmissions.innerHTML=groups.length?groups.map(renderSubmission).join(""):"<p class=\"empty-state\">Belum ada hasil kelompok.</p>";
+ const renderAssessment=user=>{
+  const userState=user.state||defaultState();
+  const records=practiceTasks.map(task=>{
+   const savedRecord=userState.practice?.[task.id];
+   const answers=savedRecord&&typeof savedRecord==="object"&&!Array.isArray(savedRecord)&&savedRecord.answers&&typeof savedRecord.answers==="object"&&!Array.isArray(savedRecord.answers)?savedRecord.answers:{};
+   const submitted=savedRecord?.submitted===true;
+   const correct=task.questions.filter(question=>submitted&&answers[question.id]===question.answer).length;
+   return {task,answers,submitted,correct};
+  });
+  const submittedRecords=records.filter(record=>record.submitted);
+  const correctCount=submittedRecords.reduce((total,record)=>total+record.correct,0);
+  const possibleCount=submittedRecords.reduce((total,record)=>total+record.task.questions.length,0);
+  const percent=possibleCount?Math.round(correctCount/possibleCount*100):null;
+  const identity=user.role==="group"
+   ?`Kelompok · ${esc((user.members||[]).join(", ")||"Anggota belum dicatat")}`
+   :`Siswa individu · No. absen ${esc(user.absence||"-")}`;
+  const quizScores=records.map(({task,submitted,correct})=>`<div class="assessment-quiz-score"><span>${esc(task.label)} · ${esc(task.title)}</span><strong>${submitted?`${correct}/${task.questions.length}`:"Belum dikumpulkan"}</strong></div>`).join("");
+  const responseDetails=records.map(({task,answers,submitted,correct})=>{
+   const questionDetails=task.questions.map((question,index)=>{
+    const choiceIndex=answers[question.id];
+    const hasAnswer=Number.isInteger(choiceIndex)&&choiceIndex>=0&&choiceIndex<question.choices.length;
+    const chosenAnswer=hasAnswer?esc(question.choices[choiceIndex]):"Belum dijawab";
+    const isCorrect=hasAnswer&&choiceIndex===question.answer;
+    return `<li class="${submitted?(isCorrect?"assessment-answer-correct":"assessment-answer-incorrect"):""}"><strong>${index+1}. ${esc(question.prompt)}</strong><span>Jawaban siswa: ${chosenAnswer}</span>${submitted?`<span>Kunci jawaban: ${esc(question.choices[question.answer])}</span>`:""}</li>`;
+   }).join("");
+   return `<section class="assessment-quiz-detail"><h5>${esc(task.label)} · ${esc(task.title)} <span>${submitted?`Nilai ${correct}/${task.questions.length}`:"Belum dinilai"}</span></h5><ol>${questionDetails}</ol></section>`;
+  }).join("");
+  return `<article class="assessment-student ${user.role==="group"?"assessment-group":""}">
+   <div class="assessment-student-heading"><div><strong>${esc(user.name||user.username)}</strong><small>${identity}</small></div><div class="assessment-total"><b>${percent===null?"—":`${percent}%`}</b><span>${percent===null?"Belum ada penilaian":`${correctCount}/${possibleCount} benar`}</span></div></div>
+   <p class="assessment-completion">${submittedRecords.length} dari ${practiceTasks.length} kuis dikumpulkan</p>
+   <div class="assessment-scores">${quizScores}</div>
+   <details class="assessment-details"><summary>Lihat jawaban siswa${submittedRecords.length?" dan kunci jawaban":""}</summary><div class="assessment-detail-list">${responseDetails}</div></details>
+  </article>`;
+ };
+ assessmentList.innerHTML=students.length?students.map(renderAssessment).join(""):"<p class=\"empty-state\">Belum ada data siswa atau kelompok untuk dinilai.</p>";
 }
+document.getElementById("refreshSubmissionsBtn").onclick=renderSubmissions;
 
 function portfolioText(){
  return `SCRIPT LAB — PORTFOLIO PENULISAN NASKAH\n\n`+stages.map((s,i)=>`[${String(i+1).padStart(2,"0")}] ${s.title.toUpperCase()}\n`+s.questions.map(q=>`${q[1]}:\n${state.answers[q[0]]||"(belum diisi)"}`).join("\n\n")).join("\n\n--------------------------------\n\n")+`\n\nPRODUCER CHALLENGE:\n${state.challenge?state.challenge.join(" | "):"Belum dibuat"}`;
@@ -934,8 +1067,20 @@ document.getElementById("exportBtn").onclick=openPortfolio;document.getElementBy
 document.getElementById("resetBtn").onclick=()=>{if(confirm("Hapus semua progress SCRIPT LAB di perangkat ini?")){localStorage.removeItem("scriptLabData");localStorage.removeItem("scriptLabUsers");location.reload();}};
 document.getElementById("logoutBtn").onclick=()=>{localStorage.removeItem("scriptLabSession");location.reload();};
 function updateLoginFields(){
- const isStudent=document.getElementById("loginRole").value==="student";
- const isGroup=document.getElementById("loginRole").value==="group";
+ const role=document.getElementById("loginRole").value;
+ const isStudent=role==="student";
+ const isGroup=role==="group";
+ const isTeacher=role==="teacher";
+ const authScreen=document.getElementById("authScreen");
+ const authCard=document.getElementById("authCard");
+ authScreen.classList.remove("role-student","role-group","role-teacher");
+ authScreen.classList.add(`role-${role}`);
+ authCard.classList.remove("role-student","role-group","role-teacher");
+ authCard.classList.add(`role-${role}`);
+ document.getElementById("loginEyebrow").textContent=isStudent?"SCRIPT LAB / SISWA INDIVIDU":isGroup?"SCRIPT LAB / KERJA KELOMPOK":"SCRIPT LAB / RUANG GURU";
+ document.getElementById("loginTitleMain").textContent=isStudent?"Mulai":isGroup?"Berkarya":"Pantau";
+ document.getElementById("loginTitleAccent").textContent=isStudent?"menulis.":isGroup?"bersama.":"kelas.";
+ document.getElementById("loginLead").textContent=isStudent?"Masuk dengan nama dan nomor absen untuk melanjutkan perjalanan menulis naskah.":isGroup?"Masuk bersama tim dengan nama kelompok, daftar anggota, dan PIN kelompok.":"Masuk ke ruang guru untuk melihat progres siswa dan membuka portfolio kelas.";
  document.getElementById("absenceField").hidden=!isStudent;
  document.getElementById("passwordField").hidden=isStudent;
  document.getElementById("groupMembersField").hidden=!isGroup;
@@ -949,7 +1094,7 @@ function updateLoginFields(){
  document.getElementById("loginUsername").placeholder=isStudent?"Masukkan nama lengkap siswa":isGroup?"Contoh: Kelompok Produksi 1":"Farhan Desri Yanto";
  document.getElementById("passwordLabel").textContent=isGroup?"PIN kelompok":"Password";
  document.getElementById("loginPassword").placeholder=isGroup?"Contoh: 1234":"Masukkan password guru";
- document.getElementById("loginHint").textContent=isStudent?"Siswa individu cukup memasukkan nama lengkap dan nomor absen.":isGroup?"Isi nama kelompok, 2–12 nama anggota, dan PIN yang mudah diingat (contoh: 1234).":"Masukkan kredensial guru untuk melanjutkan.";
+ document.getElementById("loginHint").textContent=isStudent?"Akun individu menyimpan progres atas nama dan nomor absenmu.":isGroup?"Isi 1–15 nama anggota dan gunakan PIN yang sama setiap kali kelompok masuk.":"Dashboard guru menampilkan progres individu dan kelompok yang tersimpan online.";
 }
 document.getElementById("loginRole").onchange=updateLoginFields;
 document.getElementById("loginForm").onsubmit=e=>{
@@ -978,12 +1123,12 @@ async function accessGroupAccount(accountKey,groupName,accessCode,members){
   if(response.status===404) throw new Error("Fungsi login kelompok belum ditemukan. Jalankan ulang supabase-schema.sql di Supabase → SQL Editor.");
   if(response.status===401||response.status===403) throw new Error("Supabase menolak akses. Periksa konfigurasi URL dan publishable key pada script.js.");
   const details=await response.json().catch(()=>null);
-  if(details?.message==="Invalid group account details") throw new Error("Detail kelompok tidak valid. Periksa nama kelompok, PIN minimal 4 karakter, dan daftar 2–12 anggota.");
+  if(details?.message==="Invalid group account details") throw new Error("Detail kelompok tidak valid. Periksa nama kelompok, PIN minimal 4 karakter, dan daftar 1–15 anggota.");
   throw new Error(`Supabase gagal memproses login kelompok (${response.status}). ${details?.message||"Periksa supabase-schema.sql dan coba lagi."}`);
  }
  const result=await response.json();
  if(!result.authenticated){
-  if(result.reason==="members_required") throw new Error("Isi nama 2–12 anggota kelompok, satu nama per baris.");
+  if(result.reason==="members_required") throw new Error("Isi nama 1–15 anggota kelompok, satu nama per baris.");
   throw new Error("Nama kelompok atau kode akses tidak sesuai, atau akun kelompok sedang dikunci sementara.");
  }
  return result;
@@ -1000,8 +1145,8 @@ document.getElementById("loginForm").onsubmit=async event=>{
  const members=memberText?[...new Map(memberText.split(/[\n,;]+/).map(member=>member.trim()).filter(Boolean).map(member=>[member.toLocaleLowerCase("id-ID"),member])).values()]:null;
  const slug=name.normalize("NFKD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,50).replace(/-$/g,"");
  errorElement.textContent="";
- if(name.length<3||slug.length<2||accessCode.trim().length<4||!members||members.length<2||members.length>12||members.some(member=>member.length>100)){
-  errorElement.textContent="Isi nama kelompok, PIN minimal 4 karakter, dan 2–12 nama anggota (satu nama per baris).";
+ if(name.length<3||slug.length<2||accessCode.trim().length<4||!members||members.length<1||members.length>15||members.some(member=>member.length>100)){
+  errorElement.textContent="Isi nama kelompok, PIN minimal 4 karakter, dan 1–15 nama anggota (satu nama per baris).";
   return;
  }
  submitButton.disabled=true;

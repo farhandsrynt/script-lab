@@ -8,7 +8,7 @@ const corsHeaders = {
 const stageFields: Record<string, string[]> = {
   ide: ["ide", "tokohIde", "masalahIde", "taruhanIde", "inspirasi"],
   premis: ["tokoh", "tujuan", "konflik", "taruhan"],
-  logline: ["judulCerita", "logline", "targetPenonton"],
+  logline: ["ironiCerita", "gambaranVisual", "judulMenarik", "logline", "targetPenonton"],
 };
 
 const fieldLabels: Record<string, Record<string, string>> = {
@@ -26,7 +26,9 @@ const fieldLabels: Record<string, Record<string, string>> = {
     taruhan: "Konsekuensi jika tokoh gagal",
   },
   logline: {
-    judulCerita: "Judul sementara",
+    ironiCerita: "Ironi atau hal tak terduga dalam cerita",
+    gambaranVisual: "Gambaran visual cerita",
+    judulMenarik: "Judul yang menarik",
     logline: "Logline",
     targetPenonton: "Target penonton",
   },
@@ -68,7 +70,7 @@ function buildInstructions(stage: string, fields: string[]) {
   const stageGuide: Record<string, string> = {
     ide: "Nilai apakah gagasan menggambarkan kejadian/konflik yang bisa diceritakan; tokoh memiliki detail spesifik; masalah dapat divisualisasikan; taruhan menjelaskan akibat nyata; inspirasi menjelaskan sumber atau alasan yang bermakna. Periksa juga apakah jawaban-jawaban itu membentuk satu cerita yang konsisten.",
     premis: "Nilai apakah tokoh spesifik, tujuan konkret dan dapat diperjuangkan, hambatan benar-benar menghalangi tujuan, dan kegagalan memiliki konsekuensi nyata. Periksa hubungan logis antara keempat bagian.",
-    logline: "Nilai apakah judul relevan; logline ringkas dan memuat tokoh spesifik, tujuan, hambatan, serta taruhan; ironi/paradoks tampak dalam makna cerita (bukan hanya karena ada kata 'tetapi', 'justru', atau 'padahal'); gambaran dapat divisualisasikan; dan target penonton spesifik. Periksa hubungan sebab-akibat.",
+    logline: "Nilai apakah ironi atau hal tak terduga dalam cerita dijelaskan secara spesifik; gambaran visual menjelaskan aksi, tempat, atau benda yang dapat direkam kamera dan selaras dengan cerita; judul singkat, khas, menarik, dan sesuai cerita; logline ringkas dan memuat tokoh spesifik, tujuan, hambatan, serta taruhan; ironi/paradoks tampak dalam makna cerita (bukan hanya karena ada kata 'tetapi', 'justru', atau 'padahal'); dan target penonton spesifik. Periksa hubungan sebab-akibat dan konsistensi antarjawaban.",
   };
 
   return `Anda adalah editor naskah pendidikan yang teliti dan suportif untuk siswa SMK. Evaluasi tulisan berdasarkan makna, kekhususan, logika, hubungan sebab-akibat, dan konsistensi antarjawaban; jangan meluluskan teks acak, pengulangan, jawaban kosong, atau kalimat umum hanya karena panjang atau memuat kata pemicu.

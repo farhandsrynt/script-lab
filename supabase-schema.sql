@@ -76,7 +76,7 @@ begin
      or case
        when p_members is null then false
        when jsonb_typeof(p_members) <> 'array' then true
-       when jsonb_array_length(p_members) < 2 or jsonb_array_length(p_members) > 12 then true
+       when jsonb_array_length(p_members) < 1 or jsonb_array_length(p_members) > 15 then true
        else exists (
          select 1
          from jsonb_array_elements(p_members) as member(value)
