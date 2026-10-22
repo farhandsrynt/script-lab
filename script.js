@@ -1087,14 +1087,15 @@ function updateLoginFields(){
  document.getElementById("loginAbsence").required=isStudent;
  document.getElementById("loginPassword").required=!isStudent;
  document.getElementById("loginPassword").minLength=isGroup?4:0;
+ document.getElementById("loginPassword").type=isGroup?"text":"password";
  document.getElementById("loginPassword").inputMode=isGroup?"numeric":"";
  document.getElementById("loginPassword").autocomplete=isGroup?"off":"current-password";
- document.getElementById("groupMembers").required=isGroup;
+ document.getElementById("groupMembers").required=false;
  document.getElementById("usernameLabel").textContent=isStudent?"Nama lengkap":isGroup?"Nama kelompok":"Nama guru";
  document.getElementById("loginUsername").placeholder=isStudent?"Masukkan nama lengkap siswa":isGroup?"Contoh: Kelompok Produksi 1":"Farhan Desri Yanto";
- document.getElementById("passwordLabel").textContent=isGroup?"PIN kelompok":"Password";
- document.getElementById("loginPassword").placeholder=isGroup?"Contoh: 1234":"Masukkan password guru";
- document.getElementById("loginHint").textContent=isStudent?"Akun individu menyimpan progres atas nama dan nomor absenmu.":isGroup?"Isi 1–15 nama anggota dan gunakan PIN yang sama setiap kali kelompok masuk.":"Dashboard guru menampilkan progres individu dan kelompok yang tersimpan online.";
+ document.getElementById("passwordLabel").textContent=isGroup?"PIN pilihan kelompok":"Password";
+ document.getElementById("loginPassword").placeholder=isGroup?"Tentukan PIN yang mudah diingat":"Masukkan password guru";
+ document.getElementById("loginHint").textContent=isStudent?"Akun individu menyimpan progres atas nama dan nomor absenmu.":isGroup?"Kelompok bebas menentukan PIN sendiri (minimal 4 karakter; angka disarankan). Ingat PIN ini untuk masuk kembali. Saat pertama masuk, isi 1–15 nama anggota.":"Dashboard guru menampilkan progres individu dan kelompok yang tersimpan online.";
 }
 document.getElementById("loginRole").onchange=updateLoginFields;
 document.getElementById("loginForm").onsubmit=e=>{
@@ -1145,8 +1146,8 @@ document.getElementById("loginForm").onsubmit=async event=>{
  const members=memberText?[...new Map(memberText.split(/[\n,;]+/).map(member=>member.trim()).filter(Boolean).map(member=>[member.toLocaleLowerCase("id-ID"),member])).values()]:null;
  const slug=name.normalize("NFKD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,50).replace(/-$/g,"");
  errorElement.textContent="";
- if(name.length<3||slug.length<2||accessCode.trim().length<4||!members||members.length<1||members.length>15||members.some(member=>member.length>100)){
-  errorElement.textContent="Isi nama kelompok, PIN minimal 4 karakter, dan 1–15 nama anggota (satu nama per baris).";
+ if(name.length<3||slug.length<2||accessCode.trim().length<4||(members&&(members.length>15||members.some(member=>member.length>100)))){
+  errorElement.textContent="Isi nama kelompok dan PIN minimal 4 karakter. Jika mengisi daftar anggota, masukkan maksimal 15 nama dan setiap nama maksimal 100 karakter.";
   return;
  }
  submitButton.disabled=true;
