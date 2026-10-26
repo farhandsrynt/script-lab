@@ -1270,3 +1270,130 @@ body:not(.locked) .stage-item:nth-child(4){animation-delay:.15s}
 .assessment-answer-correct span:last-child,.assessment-answer-incorrect span:last-child{font-weight:800}
 @media(max-width:900px){.assessment-scores{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:600px){.assessment-heading,.assessment-student-heading{align-items:stretch;flex-direction:column}.assessment-heading .secondary-btn{align-self:flex-start}.assessment-total{text-align:left}.assessment-total b{display:inline;margin-right:8px}.assessment-scores{grid-template-columns:1fr 1fr}.assessment-quiz-detail h5{flex-direction:column;gap:3px}}
+
+/* Mode visual khusus ruang kerja kelompok */
+body.group-mode{
+ --group-cyan:#42e6d2;
+ --group-pink:#ff6fbd;
+ --group-navy:#111a2b;
+ background:radial-gradient(circle at 8% 2%,rgba(66,230,210,.17),transparent 28%),radial-gradient(circle at 92% 18%,rgba(255,111,189,.13),transparent 26%),#0d1422;
+}
+body.group-mode::before{background-image:linear-gradient(rgba(66,230,210,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(66,230,210,.045) 1px,transparent 1px);background-size:34px 34px;opacity:.7}
+body.group-mode .topbar{background:rgba(13,20,34,.84);border-bottom-color:rgba(66,230,210,.18)}
+body.group-mode .brand-mark{background:linear-gradient(135deg,var(--group-cyan),#6754d8);color:#0d1422;border-radius:50%;transform:rotate(-8deg)}
+body.group-mode .brand{color:#f7fbff}
+body.group-mode .topbar nav a{color:#b8c9d7}
+body.group-mode .topbar nav a::after{background:linear-gradient(90deg,var(--group-cyan),var(--group-pink))}
+body.group-mode .hero{background:radial-gradient(circle at 80% 18%,rgba(66,230,210,.16),transparent 25%),linear-gradient(135deg,#0d1422,#18233a 70%,#241a36);color:#f7fbff}
+body.group-mode .hero .eyebrow{color:var(--group-cyan)}
+body.group-mode .hero h1 em{color:var(--group-pink)}
+body.group-mode .hero .lead{color:#b8c9d7}
+body.group-mode .hero-card{background:linear-gradient(145deg,#192943,#101827);border:1px solid rgba(66,230,210,.35);box-shadow:0 28px 80px rgba(0,0,0,.35),0 0 35px rgba(66,230,210,.08)}
+body.group-mode .hero-card::before{background:radial-gradient(circle,rgba(255,111,189,.35),transparent 68%)}
+body.group-mode .progress-ring{background:radial-gradient(circle at center,#192943 0 56%,transparent 57%),conic-gradient(var(--group-cyan) 0 68%,rgba(255,255,255,.1) 68% 100%)}
+body.group-mode #journey{background:linear-gradient(180deg,#111a2b,#0d1422)}
+body.group-mode #journey .eyebrow,body.group-mode #practice .eyebrow{color:var(--group-cyan)}
+body.group-mode .journey-card{background:linear-gradient(135deg,#17243a,#111a2b);border-color:rgba(66,230,210,.18);color:#f7fbff}
+body.group-mode .journey-card h3{color:#f7fbff}
+body.group-mode .journey-card p,body.group-mode .card-num,body.group-mode .card-status{color:#9db0c1}
+body.group-mode .journey-card:hover,body.group-mode .journey-card.selected{border-color:var(--group-cyan);box-shadow:0 18px 32px rgba(66,230,210,.12)}
+body.group-mode .journey-card.selected::before{background:linear-gradient(180deg,var(--group-cyan),var(--group-pink))}
+body.group-mode .workspace-section{background:radial-gradient(ellipse at 5% 0%,rgba(66,230,210,.13),transparent 32%),linear-gradient(150deg,#142238,#0d1422 76%)}
+body.group-mode .stage-item{background:#17243a;border-color:rgba(66,230,210,.16);border-radius:18px}
+body.group-mode .stage-item:hover,body.group-mode .stage-item.active{background:linear-gradient(135deg,#203b4b,#292444);border-color:var(--group-cyan);transform:translateX(5px)}
+body.group-mode .stage-item.active b{color:var(--group-cyan)}
+body.group-mode .stage-item.completed{border-color:var(--group-pink)}
+body.group-mode .stage-item.completed small{color:#ffacd8}
+body.group-mode .editor{border-color:rgba(66,230,210,.22);box-shadow:0 22px 55px rgba(0,0,0,.3)}
+body.group-mode .editor-head{border-bottom-color:rgba(66,230,210,.18)}
+body.group-mode .stage-number{color:var(--group-cyan)}
+body.group-mode .editor-actions .primary-btn,body.group-mode .practice-card button{background:linear-gradient(135deg,#1d9e98,#6754d8)}
+body.group-mode .practice-section{background:linear-gradient(180deg,#17243a,#0d1422)}
+body.group-mode .practice-summary,body.group-mode .practice-list{background:rgba(23,36,58,.86);border-color:rgba(66,230,210,.18);box-shadow:0 20px 45px rgba(0,0,0,.25);color:#f7fbff}
+body.group-mode .practice-card{background:linear-gradient(135deg,#1b2c45,#152238);border-color:rgba(66,230,210,.16)}
+body.group-mode .practice-card h4,body.group-mode .practice-card p{color:#f7fbff}
+body.group-mode .practice-card p{color:#aebdcc}
+body.group-mode .practice-chip{background:rgba(66,230,210,.13);color:var(--group-cyan)}
+body.group-mode .practice-meta div{background:rgba(66,230,210,.08);border-color:rgba(66,230,210,.12)}
+body.group-mode .practice-meta span{color:#aebdcc}
+body.group-mode .practice-bar{background:#263750}
+body.group-mode .practice-bar i{background:linear-gradient(90deg,var(--group-cyan),var(--group-pink))}
+body.group-mode .summary-badge{background:linear-gradient(135deg,#1d9e98,#6754d8)}
+
+/* Halloween group theme: warna hangat, bukan full dark */
+body.group-mode{
+ background:radial-gradient(circle at 8% 4%,rgba(255,157,54,.28),transparent 27%),radial-gradient(circle at 92% 18%,rgba(126,77,179,.22),transparent 30%),#fff3dc;
+ color:#2a1933;
+}
+body.group-mode::before{background-image:radial-gradient(circle,rgba(126,77,179,.13) 1px,transparent 1px);background-size:22px 22px;opacity:.5}
+body.group-mode .topbar{background:rgba(255,249,237,.9);border-bottom-color:rgba(62,31,74,.16)}
+body.group-mode .brand{color:#3e1f4a}
+body.group-mode .brand-mark{background:linear-gradient(135deg,#ff9d36,#7e4db3);color:#fff8ec;box-shadow:0 8px 18px rgba(126,77,179,.2)}
+body.group-mode .topbar nav a{color:#5f4565}
+body.group-mode .hero{background:radial-gradient(circle at 80% 18%,rgba(255,157,54,.3),transparent 25%),linear-gradient(135deg,#fff3dc,#f8d9bd 58%,#eadcf5);color:#3e1f4a}
+body.group-mode .hero .eyebrow{color:#c85b21}
+body.group-mode .hero h1 em{color:#7e4db3}
+body.group-mode .hero .lead{color:#654d68}
+body.group-mode .hero-card{background:linear-gradient(145deg,#4a285d,#7e4db3);border-color:rgba(62,31,74,.16);box-shadow:0 28px 65px rgba(126,77,179,.2)}
+body.group-mode .hero-card::before{background:radial-gradient(circle,rgba(255,157,54,.48),transparent 68%)}
+body.group-mode .progress-ring{background:radial-gradient(circle at center,#4a285d 0 56%,transparent 57%),conic-gradient(#a8d957 0 68%,rgba(255,255,255,.2) 68% 100%)}
+body.group-mode #journey{background:linear-gradient(180deg,#fff3dc,#f6e6d1)}
+body.group-mode #journey .eyebrow,body.group-mode #practice .eyebrow{color:#c85b21}
+body.group-mode .journey-card{background:linear-gradient(135deg,#fffaf0,#f6e1cf);border-color:rgba(126,77,179,.2);color:#3e1f4a;box-shadow:0 10px 22px rgba(126,77,179,.06)}
+body.group-mode .journey-card h3{color:#3e1f4a}
+body.group-mode .journey-card p,body.group-mode .card-num,body.group-mode .card-status{color:#765e78}
+body.group-mode .journey-card:hover,body.group-mode .journey-card.selected{border-color:#ff9d36;box-shadow:0 18px 32px rgba(255,157,54,.2)}
+body.group-mode .journey-card.selected::before{background:linear-gradient(180deg,#ff9d36,#7e4db3)}
+body.group-mode .workspace-section{background:radial-gradient(ellipse at 5% 0%,rgba(255,157,54,.18),transparent 32%),linear-gradient(150deg,#5a3568,#3e274a 76%);color:#fffaf0}
+body.group-mode .workspace-section .section-note{color:#f2dfd1}
+body.group-mode .stage-item{background:#704478;border-color:rgba(255,243,220,.2);color:#fff7e9}
+body.group-mode .stage-item:hover,body.group-mode .stage-item.active{background:linear-gradient(135deg,#86548a,#c85b62);border-color:#ffb84d;transform:translateX(5px)}
+body.group-mode .stage-item.active b{color:#ffcf70}
+body.group-mode .stage-item.completed{border-color:#a8d957}
+body.group-mode .stage-item.completed small{color:#d9f39a}
+body.group-mode .editor{background:#fffaf0;color:#3e1f4a;border-color:rgba(126,77,179,.25);box-shadow:0 22px 55px rgba(62,31,74,.2)}
+body.group-mode .editor-head{border-bottom-color:rgba(126,77,179,.18)}
+body.group-mode .stage-number{color:#c85b21}
+body.group-mode .editor-actions .primary-btn,body.group-mode .practice-card button{background:linear-gradient(135deg,#c85b21,#7e4db3)}
+body.group-mode .practice-section{background:linear-gradient(180deg,#f6e6d1,#eadcf5)}
+body.group-mode .practice-summary,body.group-mode .practice-list{background:rgba(255,250,240,.9);border-color:rgba(126,77,179,.18);box-shadow:0 20px 45px rgba(126,77,179,.1);color:#3e1f4a}
+body.group-mode .practice-card{background:linear-gradient(135deg,#fffaf0,#f5e2dc);border-color:rgba(126,77,179,.18)}
+body.group-mode .practice-card h4,body.group-mode .practice-card p{color:#3e1f4a}
+body.group-mode .practice-card p{color:#765e78}
+body.group-mode .practice-chip{background:#f8d9bd;color:#8d421f}
+body.group-mode .practice-meta div{background:#f6e6d1;border-color:rgba(200,91,33,.16)}
+body.group-mode .practice-meta span{color:#765e78}
+body.group-mode .practice-bar{background:#ead8c6}
+body.group-mode .practice-bar i{background:linear-gradient(90deg,#ff9d36,#a8d957)}
+body.group-mode .summary-badge{background:#4a285d;color:#fff8ec}
+
+/* Kartu modul dan kuis dibuat lebih hidup dalam tema Halloween */
+body.group-mode #journey .section-heading h2,
+body.group-mode #practice .section-heading h2{color:#4a285d}
+body.group-mode #journey .journey-grid{gap:16px}
+body.group-mode #journey .journey-card{min-height:118px;box-shadow:4px 5px 0 rgba(74,40,93,.12)}
+body.group-mode #journey .journey-card:nth-child(1){background:linear-gradient(135deg,#ffd18a,#ffb45f);border-color:#e47b24}
+body.group-mode #journey .journey-card:nth-child(2){background:linear-gradient(135deg,#d9c1f0,#b995d8);border-color:#7e4db3}
+body.group-mode #journey .journey-card:nth-child(3){background:linear-gradient(135deg,#dff29d,#a8d957);border-color:#719e2c}
+body.group-mode #journey .journey-card:nth-child(4){background:linear-gradient(135deg,#ffc1ce,#f48ba6);border-color:#c85b72}
+body.group-mode #journey .journey-card:nth-child(5){background:linear-gradient(135deg,#c8f1e1,#79d8bb);border-color:#3eaa88}
+body.group-mode #journey .journey-card:nth-child(6){background:linear-gradient(135deg,#e2c9f5,#c28be5);border-color:#9253b4}
+body.group-mode #journey .journey-card:nth-child(7){background:linear-gradient(135deg,#ffcf78,#ff8e5e);border-color:#d95c2f}
+body.group-mode #journey .journey-card h3,
+body.group-mode #journey .journey-card p,
+body.group-mode #journey .journey-card .card-num,
+body.group-mode #journey .journey-card .card-status{color:#3e1f4a}
+body.group-mode #journey .journey-card .card-status{font-weight:900}
+body.group-mode #journey .journey-card:hover{transform:translateY(-4px) rotate(-.5deg);box-shadow:5px 9px 0 rgba(74,40,93,.16)}
+body.group-mode #practice .practice-panel{gap:22px}
+body.group-mode #practice .practice-summary{background:linear-gradient(135deg,#fff0c7,#ffd6a0);border:2px solid #e47b24;box-shadow:5px 6px 0 rgba(74,40,93,.12)}
+body.group-mode #practice .practice-list{background:rgba(255,250,240,.72);border:2px solid #7e4db3;box-shadow:5px 6px 0 rgba(74,40,93,.12)}
+body.group-mode #practice .practice-card{border:2px solid #d7b04f;box-shadow:3px 4px 0 rgba(74,40,93,.1);transition:transform .2s ease,box-shadow .2s ease}
+body.group-mode #practice .practice-card:nth-child(1){background:linear-gradient(135deg,#fff0c7,#ffd6a0);border-color:#e47b24}
+body.group-mode #practice .practice-card:nth-child(2){background:linear-gradient(135deg,#ead8f8,#d5b8ed);border-color:#7e4db3}
+body.group-mode #practice .practice-card:nth-child(3){background:linear-gradient(135deg,#e7f6b9,#c3e879);border-color:#719e2c}
+body.group-mode #practice .practice-card:hover{transform:translateY(-3px);box-shadow:5px 7px 0 rgba(74,40,93,.16)}
+body.group-mode #practice .quiz-choice{background:rgba(255,255,255,.58);border-color:rgba(74,40,93,.18)}
+body.group-mode #practice .quiz-choice:hover{background:#fffaf0;border-color:#c85b21}
+body.group-mode #practice .quiz-choice:has(input:checked){background:#fff0b8;border-color:#c85b21;box-shadow:inset 4px 0 #c85b21}
+body.group-mode #practice .quiz-submit-row{border-top-color:rgba(74,40,93,.18)}

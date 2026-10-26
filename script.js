@@ -48,6 +48,38 @@ const stages = [
  ]}
 ];
 
+const groupStages = [
+ {id:"ide", title:"Ide Cerita", desc:"Tentukan gagasan utama yang ingin dikembangkan bersama.", questions:[
+  ["ide","Apa ide cerita kelompokmu?","Tuliskan kejadian, gagasan, atau persoalan utama yang ingin diangkat.","textarea"]
+ ]},
+ {id:"premis", title:"Premis", desc:"Padatkan cerita menjadi tokoh, tujuan, konflik, dan taruhan.", questions:[
+  ["tokoh","Siapa tokoh utama?","Sebutkan nama/peran tokoh dan ciri pentingnya.","textarea"],
+  ["tujuan","Apa tujuan tokoh?","Tuliskan hal konkret yang ingin dicapai tokoh.","textarea"],
+  ["konflik","Apa konflik atau hambatannya?","Jelaskan kekuatan yang menghalangi tujuan tokoh.","textarea"],
+  ["taruhan","Apa yang dipertaruhkan?","Jelaskan akibat jika tokoh gagal.","textarea"]
+ ]},
+ {id:"logline", title:"Logline", desc:"Rangkum cerita dalam satu kalimat yang kuat.", questions:[
+  ["logline","Tulis logline ceritamu","Gabungkan tokoh, tujuan, konflik, dan taruhan dalam satu kalimat.","textarea"]
+ ]},
+ {id:"sinopsis", title:"Sinopsis", desc:"Kembangkan logline menjadi alur cerita yang utuh.", questions:[
+  ["sinopsis","Tulis sinopsis","Ceritakan awal, perkembangan konflik, klimaks, dan penyelesaian.","textarea"]
+ ]},
+ {id:"threeActs", title:"Struktur Tiga Babak", desc:"Petakan perubahan cerita dari awal hingga akhir.", questions:[
+  ["babak1","Babak I — Pengenalan dan pemicu","Kenalkan dunia tokoh, situasi awal, lalu tuliskan peristiwa yang memulai konflik.","textarea"],
+  ["babak2","Babak II — Konfrontasi","Tuliskan usaha tokoh, hambatan yang meningkat, titik tengah, dan krisis.","textarea"],
+  ["babak3","Babak III — Klimaks dan resolusi","Tuliskan pilihan puncak tokoh, hasil konflik, dan keadaan setelahnya.","textarea"]
+ ]},
+ {id:"screenplay", title:"Shooting Script", desc:"Ubah rancangan kelompok menjadi naskah yang siap diproduksi.", questions:[
+  ["screenplay","Tulis shooting script","Gunakan INT./EXT., lokasi, waktu, aksi visual, nama tokoh, dan dialog.","textarea"],
+  ["produksi","Catatan produksi","Tuliskan kebutuhan lokasi, properti, pemain, dan hal penting untuk produksi.","textarea"]
+ ]}
+];
+
+function stagesForUser(user=currentUser){
+ return user?.role==="group"?groupStages:stages;
+}
+function activeStages(){return stagesForUser(currentUser);}
+
 const reviewSources={
  ide:"Acuan konsep: John Truby, The Anatomy of Story. Indikator yang tampil adalah rubrik latihan SCRIPT LAB.",
  premis:"Acuan konsep: John Truby, The Anatomy of Story. Indikator yang tampil adalah rubrik latihan SCRIPT LAB.",
@@ -340,6 +372,34 @@ const practiceTasks=[
  ]}
 ];
 
+const groupPracticeTasks=[
+ {id:"group-story",title:"Ide, Premis, dan Logline",label:"KUIS 1",topic:"Mengembangkan gagasan menjadi inti cerita film",questions:[
+  {id:"idea",prompt:"Langkah awal dalam mengembangkan cerita film adalah ...",choices:["Menulis credit title","Menentukan ide cerita","Memilih font naskah","Membuat daftar kru"],answer:1,explanation:"Ide cerita menjadi gagasan awal yang kemudian dikembangkan menjadi premis, logline, dan tahap berikutnya."},
+  {id:"premise",prompt:"Premis yang kuat memuat hubungan antara ...",choices:["Tokoh, tujuan, konflik, dan taruhan","Kamera, lensa, dan lampu","Judul, poster, dan credit","Lokasi, anggaran, dan jadwal saja"],answer:0,explanation:"Premis memadatkan inti cerita melalui tokoh, tujuan, konflik, dan konsekuensi atau taruhan."},
+  {id:"logline",prompt:"Fungsi logline adalah ...",choices:["Menulis semua dialog film","Merangkum cerita dalam satu kalimat yang menarik","Mencatat kebutuhan konsumsi kru","Menggantikan shooting script"],answer:1,explanation:"Logline merangkum inti cerita secara singkat agar arah dan daya tarik cerita mudah dipahami."},
+  {id:"stakes",prompt:"Dalam premis atau logline, taruhan menjelaskan ...",choices:["Berapa biaya produksi","Apa akibat jika tokoh gagal","Berapa jumlah halaman","Siapa sutradaranya"],answer:1,explanation:"Taruhan menunjukkan konsekuensi yang dihadapi tokoh jika tujuan tidak tercapai."},
+  {id:"specific",prompt:"Ide cerita yang spesifik sebaiknya memiliki ...",choices:["Tokoh, kejadian, dan persoalan yang jelas","Sebanyak mungkin tokoh tambahan","Pesan moral tanpa peristiwa","Judul tanpa konflik"],answer:0,explanation:"Ide yang spesifik lebih mudah dikembangkan karena tokoh, kejadian, dan persoalannya dapat dibayangkan."}
+ ]},
+ {id:"group-outline",title:"Sinopsis dan Struktur Tiga Babak",label:"KUIS 2",topic:"Menyusun perkembangan konflik dari awal sampai akhir",questions:[
+  {id:"synopsis",prompt:"Sinopsis yang baik menceritakan ...",choices:["Daftar properti saja","Awal, perkembangan konflik, klimaks, dan penyelesaian","Semua dialog secara lengkap","Pendapat penonton"],answer:1,explanation:"Sinopsis memberi gambaran cerita yang utuh dan menunjukkan hubungan sebab-akibat."},
+  {id:"act1",prompt:"Babak I biasanya berisi ...",choices:["Pengenalan dunia tokoh dan peristiwa pemicu","Kredit penutup","Semua hambatan terakhir","Daftar kebutuhan kamera"],answer:0,explanation:"Babak I mengenalkan tokoh dan keadaan awal, lalu menghadirkan pemicu yang menggerakkan cerita."},
+  {id:"act2",prompt:"Fokus utama Babak II adalah ...",choices:["Konfrontasi, usaha tokoh, dan hambatan yang meningkat","Memperkenalkan semua kru","Menutup semua konflik sebelum klimaks","Menulis daftar pemeran"],answer:0,explanation:"Babak II menguji tokoh melalui usaha, hambatan, pilihan sulit, dan krisis."},
+  {id:"act3",prompt:"Babak III berisi ...",choices:["Pengenalan lokasi","Klimaks, pilihan tokoh, dan resolusi","Daftar sponsor","Ide yang belum dikembangkan"],answer:1,explanation:"Babak III menghadirkan tindakan puncak, hasil konflik, dan keadaan setelahnya."},
+  {id:"turning-point",prompt:"Titik balik adalah ...",choices:["Peristiwa atau keputusan yang mengubah arah usaha tokoh","Perpindahan font","Nama pemeran utama","Jeda antarparagraf"],answer:0,explanation:"Titik balik mengubah arah cerita dan memaksa tokoh menghadapi keadaan baru."}
+ ]},
+ {id:"group-shooting",title:"Shooting Script",label:"KUIS 3",topic:"Format naskah film dan kesiapan produksi",questions:[
+  {id:"slugline",prompt:"INT. RUANG KELAS - PAGI adalah contoh ...",choices:["Logline","Scene heading atau slugline","Sinopsis","Catatan sutradara"],answer:1,explanation:"Slugline menunjukkan interior atau eksterior, lokasi, dan waktu adegan."},
+  {id:"visual-action",prompt:"Aksi dalam shooting script sebaiknya ditulis sebagai ...",choices:["Pikiran tokoh yang tidak terlihat","Hal yang dapat dilihat atau didengar kamera","Pesan moral panjang","Penjelasan anggaran"],answer:1,explanation:"Aksi film harus dapat diwujudkan dan diamati melalui gambar atau suara."},
+  {id:"dialogue",prompt:"Dialog yang efektif sebaiknya ...",choices:["Mengulang semua yang sudah terlihat","Memiliki tujuan atau konflik dan sesuai karakter","Selalu sepanjang mungkin","Tidak berhubungan dengan cerita"],answer:1,explanation:"Dialog yang baik terdengar alami, memiliki fungsi, dan menunjukkan keinginan atau konflik tokoh."},
+  {id:"scene-order",prompt:"Sebelum menulis shooting script secara lengkap, kelompok sebaiknya ...",choices:["Menyusun urutan adegan","Memilih poster film","Menulis credit title","Membeli semua properti"],answer:0,explanation:"Urutan adegan membantu kelompok memeriksa alur, konflik, dan kesinambungan cerita."},
+  {id:"production",prompt:"Shooting script yang siap diproduksi perlu memperhatikan ...",choices:["Lokasi, pemain, properti, waktu, dan kebutuhan suara atau cahaya","Jumlah pengikut media sosial saja","Warna sampul naskah saja","Nama penonton"],answer:0,explanation:"Naskah perlu mempertimbangkan kebutuhan produksi agar cerita dapat diwujudkan secara realistis."}
+ ]}
+];
+
+function practiceTasksForUser(user=currentUser){
+ return user?.role==="group"?groupPracticeTasks:practiceTasks;
+}
+
 const challenges=[
  ["BUDGET","Rp500.000","Pemain maksimal 3 orang","Lokasi maksimal 2 tempat","Durasi 5–7 menit"],
  ["WAKTU","1 hari produksi","Pemain maksimal 4 orang","Tanpa lokasi berbayar","Durasi 3–5 menit"],
@@ -362,14 +422,16 @@ function renderChallenge(challenge){
 function renderPracticeBoard(){
  const panel=document.getElementById("practicePanel");
  if(!panel) return;
+ const currentPracticeTasks=practiceTasksForUser();
+ const isGroupPractice=currentUser?.role==="group";
  const getRecord=taskId=>{
   const record=state.practice?.[taskId];
   if(!record||typeof record!=="object"||Array.isArray(record)) return {answers:{},submitted:false};
   return {answers:record.answers&&typeof record.answers==="object"?record.answers:{},submitted:record.submitted===true};
  };
- const completedCount = practiceTasks.filter(task => getRecord(task.id).submitted).length;
- const percent = Math.round((completedCount / practiceTasks.length) * 100);
- const taskCards = practiceTasks.map(task => {
+ const completedCount = currentPracticeTasks.filter(task => getRecord(task.id).submitted).length;
+ const percent = Math.round((completedCount / currentPracticeTasks.length) * 100);
+ const taskCards = currentPracticeTasks.map(task => {
   const record=getRecord(task.id);
   const answeredCount=task.questions.filter(question=>Number.isInteger(record.answers[question.id])).length;
   const review=record.submitted?`<div class="quiz-review" aria-live="polite">
@@ -406,16 +468,16 @@ function renderPracticeBoard(){
   <div class="practice-summary">
     <div class="practice-summary-header">
       <div>
-        <p class="eyebrow">KUIS PEMBELAJARAN</p>
+        <p class="eyebrow">${isGroupPractice?"KUIS NASKAH FILM":"KUIS PEMBELAJARAN"}</p>
         <h3>${percent}%</h3>
       </div>
-      <span class="summary-badge">Latihan materi</span>
+      <span class="summary-badge">${isGroupPractice?"Materi naskah film":"Latihan materi"}</span>
     </div>
     <div class="practice-bar"><i style="width:${percent}%"></i></div>
     <div class="practice-meta">
       <div><strong>${completedCount}</strong><span>kuis dikumpulkan</span></div>
-      <div><strong>${practiceTasks.length}</strong><span>total kuis</span></div>
-      <div><strong>${practiceTasks.length-completedCount}</strong><span>belum dikumpulkan</span></div>
+      <div><strong>${currentPracticeTasks.length}</strong><span>total kuis</span></div>
+      <div><strong>${currentPracticeTasks.length-completedCount}</strong><span>belum dikumpulkan</span></div>
     </div>
   </div>
   <div class="practice-list">${taskCards || '<p class="task-empty">Belum ada tugas.</p>'}</div>
@@ -426,11 +488,11 @@ function renderPracticeBoard(){
    const [taskId,questionId]=input.dataset.practiceAnswer.split(":");
    const record=getRecord(taskId);
    state.practice={...(state.practice||{}),[taskId]:{answers:{...record.answers,[questionId]:Number(input.value)},submitted:false}};
-   const answeredCount=practiceTasks.find(task=>task.id===taskId).questions.filter(question=>Number.isInteger(state.practice[taskId].answers[question.id])).length;
+   const answeredCount=currentPracticeTasks.find(task=>task.id===taskId).questions.filter(question=>Number.isInteger(state.practice[taskId].answers[question.id])).length;
    const counter=panel.querySelector(`[data-answered-count="${taskId}"]`);
    const submit=panel.querySelector(`[data-practice-submit="${taskId}"]`);
-   if(counter) counter.textContent=`${answeredCount} dari ${practiceTasks.find(task=>task.id===taskId).questions.length} dijawab`;
-   if(submit) submit.disabled=answeredCount!==practiceTasks.find(task=>task.id===taskId).questions.length;
+   if(counter) counter.textContent=`${answeredCount} dari ${currentPracticeTasks.find(task=>task.id===taskId).questions.length} dijawab`;
+   if(submit) submit.disabled=answeredCount!==currentPracticeTasks.find(task=>task.id===taskId).questions.length;
    const article=input.closest(".practice-card");
    article?.querySelector(".quiz-review")?.remove();
    save();
@@ -440,7 +502,7 @@ function renderPracticeBoard(){
   form.addEventListener("submit",event=>{
    event.preventDefault();
    const taskId=form.dataset.practiceForm;
-   const task=practiceTasks.find(item=>item.id===taskId);
+   const task=currentPracticeTasks.find(item=>item.id===taskId);
    const record=getRecord(taskId);
    if(!task||task.questions.some(question=>!Number.isInteger(record.answers[question.id]))) return;
    state.practice={...(state.practice||{}),[taskId]:{answers:record.answers,submitted:true}};
@@ -642,11 +704,14 @@ document.getElementById("previousModule").addEventListener("click",()=>changeMod
 document.getElementById("nextModule").addEventListener("click",()=>changeModule(1));
 
 function renderStages(){
- document.getElementById("stageList").innerHTML=stages.map((s,i)=>{const done=Boolean(state.completed[s.id]);return `<button class="stage-item ${i===state.current?"active":""} ${done?"completed":""}" onclick="goStage(${i})"><b>${String(i+1).padStart(2,"0")}</b><span>${s.title}</span><small>${done?"Isian lengkap":"Belum lengkap"}</small></button>`;}).join("");
+ const currentStages=activeStages();
+ document.getElementById("stageList").innerHTML=currentStages.map((s,i)=>{const done=Boolean(state.completed[s.id]);return `<button class="stage-item ${i===state.current?"active":""} ${done?"completed":""}" onclick="goStage(${i})"><b>${String(i+1).padStart(2,"0")}</b><span>${s.title}</span><small>${done?"Isian lengkap":"Belum lengkap"}</small></button>`;}).join("");
 }
 
 function renderForm(){
- const s=stages[state.current];
+ const currentStages=activeStages();
+ state.current=Math.min(state.current,currentStages.length-1);
+ const s=currentStages[state.current];
  document.getElementById("stageNumber").textContent=String(state.current+1).padStart(2,"0");
  document.getElementById("stageTitle").textContent=s.title;
  document.getElementById("stageDesc").textContent=s.desc;
@@ -659,7 +724,7 @@ function renderForm(){
  feedback();
  if(aiReviewStages.includes(s.id)) scheduleAiReview(s.id);
  document.getElementById("prevBtn").disabled=state.current===0;
- document.getElementById("nextBtn").textContent=state.current===stages.length-1?"Selesaikan Naskah ✓":"Simpan & Lanjut →";
+ document.getElementById("nextBtn").textContent=state.current===currentStages.length-1?"Selesaikan Naskah ✓":"Simpan & Lanjut →";
 }
 
 function getStageReview(stageId, answers){
@@ -681,6 +746,18 @@ function getStageReview(stageId, answers){
  const hasConcreteConsequence = value => /\b(kehilangan|diusir|dikeluarkan|bangkrut|terpisah|meninggal|sakit|ditangkap|dipenjara|tidak bisa|tak bisa|terpaksa|hancur|rusak|rahasia terbongkar|kehilangan hak|kehilangan pekerjaan|kehilangan beasiswa)\b/i.test(value);
  const hasSpecificInspiration = value => /\b(pengalaman|berita|melihat|menyaksikan|kejadian|lingkungan|keluarga|teman|sekolah|masyarakat|membaca|mengalami|pernah|bertanya|isu|peristiwa|observasi|terjadi)\b/i.test(value);
  const isFiller = value => /^(tes|test|asdf|qwerty|abc|bla|ngarang|asal(?:-|\s)?asalan|tidak tahu|terserah|random)(?:\s+\1)*[.!?]*$/i.test(value.trim());
+
+ if(currentUser?.role==="group"){
+  if(stageId==="ide"){
+   add("Ide cukup spesifik", hasSubstance(text("ide"), 7, 6) && !isFiller(text("ide")), "Jelaskan kejadian, tokoh, dan persoalan yang membuat ide ini menarik.", "ide");
+  }else if(stageId==="premis"){
+   add("Tokoh dan tujuan jelas", hasSubstance(text("tokoh"), 2, 2) && hasSubstance(text("tujuan"), 4, 3), "Jelaskan siapa tokohnya dan apa yang ingin dicapai.", "tokoh");
+   add("Konflik dan taruhan jelas", hasSubstance(text("konflik"), 4, 3) && hasSubstance(text("taruhan"), 4, 3), "Jelaskan hambatan utama dan akibat jika tokoh gagal.", "konflik");
+  }else if(stageId==="logline"){
+   add("Logline satu kalimat", text("logline").split(/\s+/).filter(Boolean).length >= 12 && text("logline").length <= 400, "Gabungkan tokoh, tujuan, konflik, dan taruhan dalam satu kalimat.", "logline");
+  }
+  if(checks.length) return checks;
+ }
 
  if(stageId === "ide"){
   add("Gagasan spesifik", hasSubstance(text("ide"), 7, 6) && hasNarrativeAction(text("ide")) && !isFiller(text("ide")), "Jelaskan siapa yang mengalami kejadian, apa yang terjadi, dan masalah yang membuatnya menarik. Satu tema umum atau kata-kata berulang belum menjadi ide cerita.", "ide");
@@ -740,6 +817,10 @@ function getStageReview(stageId, answers){
   add("Tujuan / konflik dalam percakapan", matches("dialog", /\b(tetapi|jangan|harus|tidak mau|minta|tolak|bohong|pergi|tetap|percaya|rahasia|mengapa)\b/i), "Pastikan kedua tokoh menginginkan sesuatu, bukan sekadar bertukar informasi.");
   add("Subteks dijelaskan", has("subtext", 10), "Terangkan maksud tersembunyi atau emosi yang tidak diucapkan langsung.");
   add("Dialog dapat diucapkan", lines.some(line => line.length > 15 && line.length < 180), "Baca dialog keras-keras; pecah kalimat yang terasa seperti penjelasan panjang.");
+ }else if(stageId === "threeActs"){
+  add("Babak I terisi", hasSubstance(text("babak1"), 20, 15), "Jelaskan dunia awal tokoh dan peristiwa pemicu yang memulai konflik.", "babak1");
+  add("Babak II terisi", hasSubstance(text("babak2"), 30, 20), "Jelaskan usaha tokoh, hambatan yang meningkat, dan krisis.", "babak2");
+  add("Babak III terisi", hasSubstance(text("babak3"), 20, 15), "Jelaskan klimaks, pilihan tokoh, dan akibatnya.", "babak3");
  }else if(stageId === "screenplay"){
   const screenplay = text("screenplay");
   const sluglines = (screenplay.match(/^\s*(INT\.|EXT\.|INT\/EXT\.|EXT\/INT\.)\s+.+/gim) || []).length;
@@ -760,7 +841,7 @@ function currentAiReview(stage){
 }
 
 function getAiReviewFingerprint(stageId){
- const stage=stages.find(item=>item.id===stageId);
+ const stage=activeStages().find(item=>item.id===stageId);
  if(!stage) return "";
  return JSON.stringify(stage.questions.map(question=>[question[0],String(state.answers[question[0]]||"").trim()]));
 }
@@ -828,7 +909,7 @@ function scheduleAiReview(stageId){
  activeAiReview=null;
  const sequence=++aiReviewSequence;
  const fingerprint=getAiReviewFingerprint(stageId);
- const stage=stages.find(item=>item.id===stageId);
+ const stage=activeStages().find(item=>item.id===stageId);
  const characters=stage.questions.reduce((total,question)=>total+String(state.answers[question[0]]||"").trim().length,0);
  latestAiReview={stageId,fingerprint,status:characters<25?"idle":"waiting",review:null,error:null};
  feedback();
@@ -838,7 +919,7 @@ function scheduleAiReview(stageId){
 }
 
 function requestAiReview(stageId, force=false){
- const stage=stages.find(item=>item.id===stageId);
+ const stage=activeStages().find(item=>item.id===stageId);
  if(!stage||!aiReviewStages.includes(stageId)) return Promise.resolve(null);
  const fingerprint=getAiReviewFingerprint(stageId);
  if(latestAiReview.stageId===stageId&&latestAiReview.fingerprint===fingerprint&&latestAiReview.status==="complete"){
@@ -902,7 +983,7 @@ function requestAiReview(stageId, force=false){
 }
 
 function feedback(){
- const stage = stages[state.current];
+ const stage = activeStages()[state.current];
  const checks = getStageReview(stage.id, state.answers);
  const passed = checks.filter(check => check.passed).length;
  const percent = Math.round(passed / checks.length * 100);
@@ -923,27 +1004,24 @@ function feedback(){
  renderAiReviewPanel(stage);
 }
 
-window.retryAiReview=()=>requestAiReview(stages[state.current]?.id,true);
-function goStage(i){if(i<0||i>=stages.length)return;if(i!==state.current){clearTimeout(aiReviewTimer);if(activeAiReviewController)activeAiReviewController.abort();activeAiReview=null;aiReviewSequence++;}state.current=i;save();renderStages();renderForm();document.getElementById("workspace").scrollIntoView({behavior:"smooth"});}
+window.retryAiReview=()=>requestAiReview(activeStages()[state.current]?.id,true);
+function goStage(i){const currentStages=activeStages();if(i<0||i>=currentStages.length)return;if(i!==state.current){clearTimeout(aiReviewTimer);if(activeAiReviewController)activeAiReviewController.abort();activeAiReview=null;aiReviewSequence++;}state.current=i;save();renderStages();renderForm();document.getElementById("workspace").scrollIntoView({behavior:"smooth"});}
 document.getElementById("prevBtn").onclick=()=>goStage(Math.max(0,state.current-1));
 document.getElementById("nextBtn").onclick=()=>{
+ const currentStages=activeStages();
  const stageIndex=state.current;
- const s=stages[stageIndex];
+ const s=currentStages[stageIndex];
  s.questions.forEach(q=>{const el=document.getElementById(q[0]);state.answers[q[0]]=el.value;});
  state.completed[s.id]=s.questions.every(q=>(state.answers[q[0]]||"").trim().length>0);
- if(state.current<stages.length-1) state.current++; save();renderStages();renderForm();updateStats();
+ if(state.current<currentStages.length-1) state.current++; save();renderStages();renderForm();updateStats();
  document.getElementById("workspace").scrollIntoView({behavior:"smooth"});
 };
-document.getElementById("challengeBtn").onclick=()=>{
- const c=challenges[Math.floor(Math.random()*challenges.length)];state.challenge=c;save();
- renderChallenge(c);
-};
-
 function updateStats(){
- const total=stages.length, done=Object.values(state.completed).filter(Boolean).length;
+ const total=activeStages().length, done=activeStages().filter(stage=>state.completed[stage.id]).length;
  const percent=Math.round(done/total*100);document.getElementById("heroPercent").textContent=percent+"%";
- const practiceDone=practiceTasks.filter(task=>state.practice?.[task.id]?.submitted===true).length;
- document.getElementById("stats").innerHTML=[["Progress",percent+"%","Tahap screenplay"],["Tahap selesai",done,"dari "+total],["Jawaban",Object.keys(state.answers).filter(k=>state.answers[k].trim()).length,"isian tersimpan"],["Praktik",`${practiceDone}/${practiceTasks.length}`,"latihan mandiri"]].map(x=>`<div class="stat"><strong>${x[1]}</strong><span>${x[0]} — ${x[2]}</span></div>`).join("");
+ const currentPracticeTasks=practiceTasksForUser();
+ const practiceDone=currentPracticeTasks.filter(task=>state.practice?.[task.id]?.submitted===true).length;
+ document.getElementById("stats").innerHTML=[["Progress",percent+"%",currentUser?.role==="group"?"Tahap shooting script":"Tahap screenplay"],["Tahap selesai",done,"dari "+total],["Jawaban",Object.keys(state.answers).filter(k=>state.answers[k].trim()).length,"isian tersimpan"],["Praktik",`${practiceDone}/${currentPracticeTasks.length}`,"latihan mandiri"]].map(x=>`<div class="stat"><strong>${x[1]}</strong><span>${x[0]} — ${x[2]}</span></div>`).join("");
  const studentProgress=document.getElementById("studentProgress");
  if(studentProgress) studentProgress.innerHTML=`<strong>${percent}%</strong><span>${done} dari ${total} tahap selesai</span><div class="student-progress-track"><i style="width:${percent}%"></i></div>`;
 }
@@ -971,10 +1049,10 @@ async function renderSubmissions(){
  const studentSelect=document.getElementById("portfolioStudent");
  if(studentSelect) studentSelect.innerHTML=`<option value="">Pilih siswa atau kelompok untuk dibuatkan portfolio</option>`+students.map(user=>`<option value="${esc(user.username)}">${user.role==="group"?"Kelompok":"Siswa"}: ${esc(user.name||user.username)}${user.role==="group"?` · ${esc((user.members||[]).join(", "))}`:` · No. absen ${esc(user.absence||"-")}`}</option>`).join("");
  const renderSubmission=user=>{
-  const userState=user.state||defaultState(), done=Object.values(userState.completed||{}).filter(Boolean).length;
+  const userState=user.state||defaultState(), done=stagesForUser(user).filter(stage=>userState.completed?.[stage.id]).length;
   const answers=Object.values(userState.answers||{}).filter(value=>String(value).trim()).length;
   const identity=user.role==="group"?`Kelompok · ${esc((user.members||[]).join(", ")||"Anggota belum dicatat")}`:`Siswa individu · No. absen ${esc(user.absence||"-")}`;
-  return `<div class="submission ${user.role==="group"?"submission-group":""}"><div><strong>${esc(user.name||user.username)}</strong><small>${identity}</small></div><b>${Math.round(done/stages.length*100)}%</b><span>${answers} jawaban tersimpan</span></div>`;
+  return `<div class="submission ${user.role==="group"?"submission-group":""}"><div><strong>${esc(user.name||user.username)}</strong><small>${identity}</small></div><b>${Math.round(done/stagesForUser(user).length*100)}%</b><span>${answers} jawaban tersimpan</span></div>`;
  };
  const individuals=students.filter(user=>user.role==="student");
  const groups=students.filter(user=>user.role==="group");
@@ -982,7 +1060,8 @@ async function renderSubmissions(){
  groupSubmissions.innerHTML=groups.length?groups.map(renderSubmission).join(""):"<p class=\"empty-state\">Belum ada hasil kelompok.</p>";
  const renderAssessment=user=>{
   const userState=user.state||defaultState();
-  const records=practiceTasks.map(task=>{
+  const userPracticeTasks=practiceTasksForUser(user);
+  const records=userPracticeTasks.map(task=>{
    const savedRecord=userState.practice?.[task.id];
    const answers=savedRecord&&typeof savedRecord==="object"&&!Array.isArray(savedRecord)&&savedRecord.answers&&typeof savedRecord.answers==="object"&&!Array.isArray(savedRecord.answers)?savedRecord.answers:{};
    const submitted=savedRecord?.submitted===true;
@@ -1009,7 +1088,7 @@ async function renderSubmissions(){
   }).join("");
   return `<article class="assessment-student ${user.role==="group"?"assessment-group":""}">
    <div class="assessment-student-heading"><div><strong>${esc(user.name||user.username)}</strong><small>${identity}</small></div><div class="assessment-total"><b>${percent===null?"—":`${percent}%`}</b><span>${percent===null?"Belum ada penilaian":`${correctCount}/${possibleCount} benar`}</span></div></div>
-   <p class="assessment-completion">${submittedRecords.length} dari ${practiceTasks.length} kuis dikumpulkan</p>
+   <p class="assessment-completion">${submittedRecords.length} dari ${userPracticeTasks.length} kuis dikumpulkan</p>
    <div class="assessment-scores">${quizScores}</div>
    <details class="assessment-details"><summary>Lihat jawaban siswa${submittedRecords.length?" dan kunci jawaban":""}</summary><div class="assessment-detail-list">${responseDetails}</div></details>
   </article>`;
@@ -1019,14 +1098,20 @@ async function renderSubmissions(){
 document.getElementById("refreshSubmissionsBtn").onclick=renderSubmissions;
 
 function portfolioText(){
- return `SCRIPT LAB — PORTFOLIO PENULISAN NASKAH\n\n`+stages.map((s,i)=>`[${String(i+1).padStart(2,"0")}] ${s.title.toUpperCase()}\n`+s.questions.map(q=>`${q[1]}:\n${state.answers[q[0]]||"(belum diisi)"}`).join("\n\n")).join("\n\n--------------------------------\n\n")+`\n\nPRODUCER CHALLENGE:\n${state.challenge?state.challenge.join(" | "):"Belum dibuat"}`;
+ const portfolioStages=stagesForUser(currentUser);
+ return `SCRIPT LAB — PORTFOLIO PENULISAN NASKAH\n\n`+portfolioStages.map((s,i)=>`[${String(i+1).padStart(2,"0")}] ${s.title.toUpperCase()}\n`+s.questions.map(q=>`${q[1]}:\n${state.answers[q[0]]||"(belum diisi)"}`).join("\n\n")).join("\n\n--------------------------------\n\n")+`\n\nPRODUCER CHALLENGE:\n${state.challenge?state.challenge.join(" | "):"Belum dibuat"}`;
+}
+function portfolioText(){
+ const portfolioStages=stagesForUser(currentUser);
+ return `SCRIPT LAB — PORTFOLIO PENULISAN NASKAH\n\n`+portfolioStages.map((s,i)=>`[${String(i+1).padStart(2,"0")}] ${s.title.toUpperCase()}\n`+s.questions.map(q=>`${q[1]}:\n${state.answers[q[0]]||"(belum diisi)"}`).join("\n\n")).join("\n\n--------------------------------\n\n`);
 }
 function portfolioHtml(portfolioState=state,portfolioUser=currentUser){
- const done=Object.values(portfolioState.completed||{}).filter(Boolean).length, percent=Math.round(done/stages.length*100);
- const answerSections=stages.map((stage,index)=>`<section class="stage"><div class="stage-title"><span>${String(index+1).padStart(2,"0")}</span><h2>${esc(stage.title)}</h2></div>${stage.questions.map(question=>`<div class="answer"><h3>${esc(question[1])}</h3><p>${esc(portfolioState.answers?.[question[0]]||"Belum diisi").replace(/\n/g,"<br>")}</p></div>`).join("")}</section>`).join("");
+ const portfolioStages=stagesForUser(portfolioUser);
+ const done=portfolioStages.filter(stage=>portfolioState.completed?.[stage.id]).length, percent=Math.round(done/portfolioStages.length*100);
+ const answerSections=portfolioStages.map((stage,index)=>`<section class="stage"><div class="stage-title"><span>${String(index+1).padStart(2,"0")}</span><h2>${esc(stage.title)}</h2></div>${stage.questions.map(question=>`<div class="answer"><h3>${esc(question[1])}</h3><p>${esc(portfolioState.answers?.[question[0]]||"Belum diisi").replace(/\n/g,"<br>")}</p></div>`).join("")}</section>`).join("");
  const portfolioIdentity=portfolioUser?.role==="group"?`<div><b>Anggota kelompok</b><span>${esc((portfolioUser.members||[]).join(", ")||"Belum dicatat")}</span></div>`:`<div><b>Nomor absen</b><span>${esc(portfolioUser?.absence||"-")}</span></div>`;
  return `<!doctype html><html lang="id"><head><meta charset="UTF-8"><title>Portfolio - ${esc(portfolioUser?.name||"SCRIPT LAB")}</title><style>
- @page{size:A4;margin:18mm}*{box-sizing:border-box}body{margin:0;color:#17171d;background:#f5f1e9;font:15px Arial,sans-serif;line-height:1.65}.sheet{max-width:900px;margin:30px auto;background:#fffdf8;padding:55px 65px;box-shadow:0 15px 50px #17171d1c}.cover{min-height:520px;display:flex;flex-direction:column;justify-content:space-between;border-bottom:3px solid #735cff;padding-bottom:35px}.eyebrow{color:#735cff;font-size:11px;font-weight:bold;letter-spacing:3px}.cover h1{font:700 64px Arial,sans-serif;line-height:.95;margin:45px 0 20px}.cover h1 em{color:#735cff;font-style:normal}.meta{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.meta div{background:#f1efff;padding:14px;border-radius:7px}.meta b{display:block;font-size:11px;color:#777680;text-transform:uppercase;letter-spacing:1px}.meta span{font-weight:bold}.stage{break-inside:avoid;border-bottom:1px solid #d9d5cc;padding:30px 0}.stage-title{display:flex;align-items:center;gap:15px}.stage-title span{color:#735cff;font-weight:bold}.stage-title h2{font-size:26px;margin:0}.answer{margin:22px 0}.answer h3{font-size:14px;margin:0 0 5px;color:#735cff}.answer p{margin:0;white-space:normal}.challenge{margin-top:28px;padding:20px;background:#f08a5d;border-radius:8px}.challenge h2{margin:0 0 8px;font-size:20px}.print-actions{position:fixed;top:18px;right:18px;display:flex;gap:8px}.print-actions button{border:0;border-radius:6px;padding:11px 15px;background:#17171d;color:white;font-weight:bold;cursor:pointer}.print-actions button:first-child{background:#735cff}@media print{body{background:white}.sheet{margin:0;max-width:none;padding:0;box-shadow:none}.print-actions{display:none}.cover{min-height:245mm}}
+ @page{size:A4;margin:18mm 20mm}*{box-sizing:border-box}body{margin:0;color:#20202a;background:#eeeae3;font:12pt/1.55 "Courier New",Courier,monospace}.sheet{width:210mm;max-width:100%;margin:24px auto;background:#fffdf8;padding:20mm 18mm;box-shadow:0 16px 40px rgba(32,32,42,.14)}.cover{min-height:245mm;display:flex;flex-direction:column;justify-content:space-between;border-bottom:2px solid #20202a;padding-bottom:18mm}.eyebrow{color:#20202a;font-size:10pt;font-weight:bold;letter-spacing:.08em;margin:0 0 18mm}.cover h1{font:700 25pt/1.2 "Courier New",Courier,monospace;margin:0 0 10mm;text-transform:uppercase}.cover h1 em{font-style:normal}.cover p{max-width:150mm;margin:0;text-align:justify}.meta{display:grid;grid-template-columns:repeat(3,1fr);gap:5mm;margin-top:16mm}.meta div{background:#f1eee8;border:1px solid #bdb8ad;padding:4mm;min-height:20mm}.meta b{display:block;font-size:9pt;text-transform:uppercase;letter-spacing:.06em;margin-bottom:2mm}.meta span{display:block;font-size:10pt;overflow-wrap:anywhere}.stage{break-inside:avoid;border-bottom:1px solid #bdb8ad;padding:10mm 0}.stage-title{display:flex;align-items:baseline;gap:8mm;border-bottom:1px solid #20202a;padding-bottom:4mm;margin-bottom:8mm}.stage-title span{font-weight:bold;min-width:12mm}.stage-title h2{font-size:15pt;line-height:1.3;margin:0;text-transform:uppercase}.answer{margin:7mm 0}.answer h3{font-size:10pt;line-height:1.35;margin:0 0 3mm;text-transform:uppercase}.answer p{margin:0;white-space:pre-wrap;text-align:justify;overflow-wrap:anywhere}.challenge{margin-top:10mm;padding:6mm;border:1px solid #20202a;background:#f1eee8}.challenge h2{margin:0 0 3mm;font-size:14pt;text-transform:uppercase}.challenge p{margin:0;white-space:pre-wrap;text-align:justify}.print-actions{position:fixed;top:18px;right:18px;display:flex;gap:8px}.print-actions button{border:1px solid #20202a;border-radius:3px;padding:10px 14px;background:#20202a;color:white;font:700 10pt "Courier New",Courier,monospace;cursor:pointer}.print-actions button:first-child{background:#fffdf8;color:#20202a}@media print{body{background:white}.sheet{width:auto;margin:0;max-width:none;padding:0;box-shadow:none}.print-actions{display:none}.cover{min-height:245mm}}
  </style></head><body><div class="print-actions"><button onclick="window.print()">Simpan sebagai PDF / Cetak</button><button onclick="window.close()">Tutup</button></div><main class="sheet"><section class="cover"><div><p class="eyebrow">SCRIPT LAB / PORTFOLIO PENULISAN NASKAH</p><h1>${esc(portfolioUser?.name||"Siswa")}<br><em>Portfolio</em></h1><p>Dokumentasi proses pengembangan ide menjadi naskah yang siap diproduksi.</p></div><div class="meta">${portfolioIdentity}<div><b>Progress</b><span>${percent}%</span></div><div><b>Tanggal</b><span>${new Date().toLocaleDateString("id-ID")}</span></div></div></section>${answerSections}<div class="challenge"><h2>Producer Challenge</h2><p>${esc(portfolioState.challenge?portfolioState.challenge.join(" • "):"Belum dibuat")}</p></div></main></body></html>`;
 }
 function openPortfolio(){
@@ -1035,7 +1120,7 @@ function openPortfolio(){
  if(currentUser?.role==="teacher"&&!selectedUser){alert("Pilih siswa atau kelompok terlebih dahulu.");return;}
  const portfolioWindow=window.open("","_blank","width=1000,height=800");
  if(!portfolioWindow){alert("Izinkan pop-up browser untuk membuka portfolio.");return;}
- portfolioWindow.document.open();portfolioWindow.document.write(portfolioHtml(selectedUser.state||defaultState(),selectedUser));portfolioWindow.document.close();
+ portfolioWindow.document.open();portfolioWindow.document.write(portfolioHtml(selectedUser.state||defaultState(),selectedUser).replace(/<div class="challenge">[\s\S]*?<\/div><\/main>/,"</main>"));portfolioWindow.document.close();
 }
 async function deleteStudentData(username){
  if(!username) {alert("Pilih siswa terlebih dahulu.");return;}
@@ -1176,10 +1261,17 @@ document.getElementById("loginForm").onsubmit=async event=>{
 function activateSession(){
  migrateAiReviewProgress();
  document.body.classList.remove("locked");document.body.classList.toggle("teacher-mode",currentUser.role==="teacher");document.body.classList.toggle("student-mode",isLearner());
+ document.body.classList.toggle("group-mode",currentUser.role==="group");
+ const isGroup=currentUser.role==="group";
+ document.querySelector("#home .eyebrow").textContent=isGroup?"RUANG KERJA KELOMPOK":"ON AIR / WRITING ROOM";
+ document.querySelector("#home h1").innerHTML=isGroup?"Berkarya<br><em>bersama.</em><br>Siap tayang.":"Mulai menulis.<br><em>Jadi cerita.</em><br>Siap tayang.";
+ document.querySelector("#home .lead").textContent=isGroup?"Bangun satu cerita bersama tim, dari ide pertama sampai shooting script yang siap diproduksi.":"Ruang kreatif untuk mengembangkan ide, menulis naskah, dan belajar proses produksi film—satu tahap, satu karya.";
+ document.querySelector("#workspace .eyebrow").textContent=isGroup?"02 / COLLABORATIVE WRITING ROOM":"02 / WRITING ROOM";
+ document.querySelector("#workspace .section-note").textContent=isGroup?"Susun cerita bersama secara bertahap. Setiap tahap menjadi fondasi untuk tahap berikutnya.":"Pilih tahap, jawab pertanyaan, lalu gunakan feedback untuk melakukan revisi.";
+ document.querySelector("#practice .eyebrow").textContent=isGroup?"03 / KUIS NASKAH FILM":"03 / LATIHAN MANDIRI";
  document.getElementById("authScreen").classList.add("hidden");document.getElementById("sessionLabel").textContent=`${currentUser.name||currentUser.username} · ${currentUser.role==="teacher"?"Guru":currentUser.role==="group"?"Kelompok":"Siswa individu"}`;
  document.querySelector('nav a[href="#teacher"]').hidden=currentUser.role!=="teacher";
  renderJourney();renderStages();renderForm();renderPracticeBoard();updateStats();
- if(state.challenge) renderChallenge(state.challenge);
  if(currentUser.role==="teacher") renderSubmissions();
 }
 window.goStage=goStage;
@@ -1192,4 +1284,3 @@ if(currentUser?.role==="group"){
   console.warn("Sesi kelompok tidak dapat memuat progres.",error);
  });
 }else if(currentUser) activateSession();
-if(state.challenge) renderChallenge(state.challenge);

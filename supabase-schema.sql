@@ -72,20 +72,26 @@ begin
      or length(trim(p_group_name)) < 3
      or length(trim(p_group_name)) > 80
      or length(p_access_code) < 4
-     or length(p_access_code) > 128
-     or case
-       when p_members is null then false
-       when jsonb_typeof(p_members) <> 'array' then true
-       when jsonb_array_length(p_members) < 1 or jsonb_array_length(p_members) > 15 then true
-       else exists (
-         select 1
-         from jsonb_array_elements(p_members) as member(value)
-         where jsonb_typeof(member.value) <> 'string'
-            or length(trim(member.value #>> '{}')) = 0
-            or length(trim(member.value #>> '{}')) > 100
-       )
-     end then
+     or length(p_access_code) > 128 then
     raise exception 'Invalid group account details';
+  end if;
+
+  if p_members is not null then
+    if jsonb_typeof(p_members) <> 'array'
+       or jsonb_array_length(p_members) < 1
+       or jsonb_array_length(p_members) > 15 then
+      raise exception 'Invalid group account details';
+    end if;
+
+    if exists (
+      select 1
+      from jsonb_array_elements(p_members) as member(value)
+      where jsonb_typeof(member.value) <> 'string'
+         or length(trim(member.value #>> '{}')) = 0
+         or length(trim(member.value #>> '{}')) > 100
+    ) then
+      raise exception 'Invalid group account details';
+    end if;
   end if;
 
   select * into v_group
