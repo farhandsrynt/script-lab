@@ -865,6 +865,13 @@ function renderAiReviewPanel(stage){
   const suggestions=review.issues.filter(issue=>!issue.blocking).map(renderIssue).join("");
   const strengths=review.strengths.map(strength=>`<li>${esc(strength)}</li>`).join("");
   panel.innerHTML=`<div class="ai-review-header"><div><strong>Ulasan AI</strong><span>Penilaian makna dan konsistensi</span></div><b class="${review.ready?"ai-ready":"ai-needs-revision"}">${review.ready?"SIAP LANJUT":"PERLU REVISI"} · ${review.score}%</b></div><p class="ai-review-summary">${esc(review.summary)}</p>${strengths?`<div class="ai-strengths"><strong>Yang sudah kuat</strong><ul>${strengths}</ul></div>`:""}${blockingIssues?`<div class="ai-issues"><strong>Wajib diperbaiki sebelum lanjut</strong><ul>${blockingIssues}</ul></div>`:""}${suggestions?`<div class="ai-suggestions"><strong>Saran tambahan</strong><ul>${suggestions}</ul></div>`:""}<p class="ai-review-disclaimer">Ulasan AI dapat keliru. Gunakan saran sebagai panduan, bukan pengganti pertimbanganmu dan guru.</p>`;
+  const correctionIssues=review.issues.filter(issue=>issue.correction);
+  if(correctionIssues.length){
+   const correctionPanel=document.createElement("div");
+   correctionPanel.className="ai-corrections";
+   correctionPanel.innerHTML=`<strong>Contoh perbaikan</strong><ul>${correctionIssues.map(issue=>`<li>${esc(issue.correction)}</li>`).join("")}</ul>`;
+   panel.appendChild(correctionPanel);
+  }
  }else if(status==="loading"){
   panel.innerHTML=`<div class="ai-review-status" role="status"><strong>AI sedang membaca tulisanmu…</strong><span>Memeriksa makna, kekhususan, dan hubungan antarjawaban.</span></div>`;
  }else if(status==="error"){
@@ -885,6 +892,9 @@ function updateInlineFeedback(stage, aiReview){
    : [];
   const control=question.querySelector("input, textarea, select");
   const previousNote=question.querySelector(".field-feedback");
+  const correctionMessages=aiReview
+   ? aiReview.issues.filter(issue=>issue.field===field&&issue.blocking&&issue.correction).map(issue=>`Perbaikan konkret: ${issue.correction}`)
+   : [];
   if(previousNote) previousNote.remove();
   question.classList.toggle("has-error",messages.length>0);
   if(messages.length){
@@ -892,7 +902,7 @@ function updateInlineFeedback(stage, aiReview){
    const note=document.createElement("small");
    note.className="field-feedback";
    note.id=`${field}-feedback`;
-   note.textContent=messages.join(" ");
+   note.textContent=messages.concat(correctionMessages).join(" ");
    control.setAttribute("aria-describedby",note.id);
    question.appendChild(note);
   }else{
@@ -1030,8 +1040,9 @@ async function renderSubmissions(){
  if(currentUser?.role!=="teacher") return;
  const individualSubmissions=document.getElementById("individualSubmissions");
  const groupSubmissions=document.getElementById("groupSubmissions");
- const assessmentList=document.getElementById("assessmentList");
- if(!individualSubmissions||!groupSubmissions||!assessmentList) return;
+ const individualAssessments=document.getElementById("individualAssessments");
+ const groupAssessments=document.getElementById("groupAssessments");
+ if(!individualSubmissions||!groupSubmissions||!individualAssessments||!groupAssessments) return;
  const dashboardStatus=document.getElementById("dashboardStatus");
  let students=Object.values(users).filter(user=>isLearner(user));
  try{
@@ -1093,11 +1104,12 @@ async function renderSubmissions(){
    <details class="assessment-details"><summary>Lihat jawaban siswa${submittedRecords.length?" dan kunci jawaban":""}</summary><div class="assessment-detail-list">${responseDetails}</div></details>
   </article>`;
  };
- assessmentList.innerHTML=students.length?students.map(renderAssessment).join(""):"<p class=\"empty-state\">Belum ada data siswa atau kelompok untuk dinilai.</p>";
+ individualAssessments.innerHTML=individuals.length?individuals.map(renderAssessment).join(""):"<p class=\"empty-state\">Belum ada penilaian siswa individu.</p>";
+ groupAssessments.innerHTML=groups.length?groups.map(renderAssessment).join(""):"<p class=\"empty-state\">Belum ada penilaian siswa kelompok.</p>";
 }
 document.getElementById("refreshSubmissionsBtn").onclick=renderSubmissions;
 
-function portfolioText(){
+/* function portfolioText(){
  const portfolioStages=stagesForUser(currentUser);
  return `SCRIPT LAB — PORTFOLIO PENULISAN NASKAH\n\n`+portfolioStages.map((s,i)=>`[${String(i+1).padStart(2,"0")}] ${s.title.toUpperCase()}\n`+s.questions.map(q=>`${q[1]}:\n${state.answers[q[0]]||"(belum diisi)"}`).join("\n\n")).join("\n\n--------------------------------\n\n")+`\n\nPRODUCER CHALLENGE:\n${state.challenge?state.challenge.join(" | "):"Belum dibuat"}`;
 }
@@ -1105,6 +1117,8 @@ function portfolioText(){
  const portfolioStages=stagesForUser(currentUser);
  return `SCRIPT LAB — PORTFOLIO PENULISAN NASKAH\n\n`+portfolioStages.map((s,i)=>`[${String(i+1).padStart(2,"0")}] ${s.title.toUpperCase()}\n`+s.questions.map(q=>`${q[1]}:\n${state.answers[q[0]]||"(belum diisi)"}`).join("\n\n")).join("\n\n--------------------------------\n\n`);
 }
+*/
+function portfolioText(){return stagesForUser(currentUser).map((s,i)=>"["+String(i+1).padStart(2,"0")+"] "+s.title.toUpperCase()+"\n"+s.questions.map(q=>q[1]+":\n"+(state.answers[q[0]]||"(belum diisi)")).join("\n\n")).join("\n\n--------------------------------\n\n");}
 function portfolioHtml(portfolioState=state,portfolioUser=currentUser){
  const portfolioStages=stagesForUser(portfolioUser);
  const done=portfolioStages.filter(stage=>portfolioState.completed?.[stage.id]).length, percent=Math.round(done/portfolioStages.length*100);

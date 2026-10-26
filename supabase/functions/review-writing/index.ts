@@ -51,11 +51,12 @@ const outputSchema = (fields: string[]) => ({
       items: {
         type: "object",
         additionalProperties: false,
-        required: ["field", "criterion", "feedback", "revisionQuestion", "blocking"],
+        required: ["field", "criterion", "feedback", "correction", "revisionQuestion", "blocking"],
         properties: {
           field: { type: "string", enum: fields },
           criterion: { type: "string" },
           feedback: { type: "string" },
+          correction: { type: "string" },
           revisionQuestion: { type: "string" },
           blocking: { type: "boolean" },
         },
@@ -82,8 +83,10 @@ ${fieldGuide}
 
 Aturan:
 - Beri feedback dalam bahasa Indonesia yang jelas, spesifik, ramah, dan dapat ditindaklanjuti.
-- Jangan menulis ulang cerita atau memberi jawaban jadi. Ajukan pertanyaan revisi yang membantu siswa berpikir.
-- Tandai setiap kelemahan substantif pada field yang tepat. Jika satu jawaban mengandung beberapa masalah, gabungkan agar feedback tetap ringkas.
+- Bedakan dengan tegas antara tulisan yang salah secara konsep/logika, tulisan yang belum lengkap, dan saran penyempurnaan.
+- Tandai setiap kelemahan substantif pada field yang tepat. Jika tulisan salah atau belum memenuhi kriteria, jelaskan secara langsung bahwa bagian itu perlu diperbaiki.
+- Untuk setiap issue, isi correction dengan perbaikan konkret: tunjukkan unsur yang hilang/salah dan berikan pola kalimat atau contoh singkat yang bisa dijadikan acuan. Jangan mengarang detail cerita yang tidak ditulis siswa.
+- Jangan mengambil alih seluruh cerita siswa atau menulis jawaban final yang panjang. Contoh perbaikan harus singkat, spesifik, dan tetap memberi ruang bagi siswa untuk menulis ulang.
 - Pujian hanya untuk hal konkret yang benar-benar kuat.
 - Tandai blocking=true hanya untuk kekurangan penting yang membuat draft belum layak maju; blocking=false untuk saran penyempurnaan yang tidak wajib.
 - ready hanya true bila jawaban cukup bermakna, spesifik, dan koheren untuk maju ke tahap berikutnya. Jika ready=false, sertakan minimal satu issue blocking=true. Saran opsional (blocking=false) tidak boleh menghalangi kemajuan.
@@ -245,6 +248,7 @@ Deno.serve(async (request) => {
         fields.includes(String(issue.field)) &&
         typeof issue.criterion === "string" &&
         typeof issue.feedback === "string" &&
+        typeof issue.correction === "string" &&
         typeof issue.revisionQuestion === "string" &&
         typeof issue.blocking === "boolean") &&
       (review.ready || review.issues.some((issue: { blocking?: boolean }) => issue.blocking));
@@ -262,12 +266,14 @@ Deno.serve(async (request) => {
         field: string;
         criterion: string;
         feedback: string;
+        correction: string;
         revisionQuestion: string;
         blocking: boolean;
       }) => ({
         field: issue.field,
         criterion: issue.criterion.slice(0, 100),
         feedback: issue.feedback.slice(0, 400),
+        correction: issue.correction.slice(0, 400),
         revisionQuestion: issue.revisionQuestion.slice(0, 300),
         blocking: issue.blocking,
       })),
