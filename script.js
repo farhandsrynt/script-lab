@@ -1201,9 +1201,13 @@ document.getElementById("loginForm").onsubmit=e=>{
  e.preventDefault();
  const role=document.getElementById("loginRole").value, name=document.getElementById("loginUsername").value.trim(), normalizedName=name.toLowerCase(), absence=document.getElementById("loginAbsence").value.trim(), password=document.getElementById("loginPassword").value;
  const username=role==="student"?`siswa-${absence}-${normalizedName.replace(/[^a-z0-9]+/g,"-")}`:normalizedName;
- const valid=(role==="teacher"&&normalizedName==="farhan desri yanto"&&password==="051202")||(role==="student"&&name.length>=2&&/^[0-9]+$/.test(absence)&&Number(absence)>0);
+ const teacherAccounts={
+   "farhan desri yanto":"051202",
+   "sapto agung nugroho":"197009022005011009"
+ };
+ const valid=(role==="teacher"&&teacherAccounts[normalizedName]===password)||(role==="student"&&name.length>=2&&/^[0-9]+$/.test(absence)&&Number(absence)>0);
  if(!valid){document.getElementById("loginError").textContent=role==="student"?"Masukkan nama lengkap dan nomor absen yang benar.":"Nama guru atau password tidak sesuai.";return;}
- if(!users[username]) users[username]={username,name:role==="teacher"?"Farhan Desri Yanto":name,absence,role,state:defaultState()};
+ if(!users[username]) users[username]={username,name,absence,role,state:defaultState()};
  currentUser=users[username];state=currentUser.state||defaultState();localStorage.setItem("scriptLabSession",username);loadStudentWork(currentUser).then(activateSession);
 };
 const individualLoginHandler=document.getElementById("loginForm").onsubmit;
