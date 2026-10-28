@@ -14,7 +14,7 @@ SCRIPT LAB adalah web app pembelajaran berbasis HTML, CSS, dan JavaScript untuk 
 - AI berfungsi sebagai pendamping belajar: memberi feedback dan pertanyaan revisi pada ide cerita, premis, dan logline; siswa tetap bebas membuka dan melanjutkan ke tahap mana pun
 - Latihan mandiri berupa 4 kuis pilihan ganda tentang format naskah, pengembangan cerita, screenplay, dan produksi; jawaban tersimpan, dapat dinilai, dan dilengkapi pembahasan
 - Producer Challenge acak
-- Export portfolio siswa menjadi TXT
+- Ekspor portfolio siswa/kelompok menjadi PDF langsung dengan pagination untuk naskah panjang; tersedia juga tampilan cetak browser
 - Login siswa individu (nama + nomor absen), akun kerja kelompok (nama kelompok + nama anggota + PIN sederhana), dan guru
 - Satu ruang kerja bersama per kelompok; hasil kerja individu dan kelompok dipantau terpisah di dashboard guru
 - Dashboard guru menampilkan anggota kelompok serta mendukung ekspor portfolio individu/kelompok

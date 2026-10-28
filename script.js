@@ -717,7 +717,7 @@ function renderForm(){
  document.getElementById("stageDesc").textContent=s.desc;
  document.getElementById("formArea").innerHTML=s.questions.map(q=>{
   const val=state.answers[q[0]]||"";
-  const control=q[3]==="textarea"?`<textarea id="${q[0]}" rows="5" placeholder="${esc(q[2])}">${esc(val)}</textarea>`:`<input id="${q[0]}" type="${esc(q[3])}" value="${esc(val)}" placeholder="${esc(q[2])}">`;
+  const control=q[3]==="textarea"?`<textarea id="${q[0]}" rows="8" placeholder="${esc(q[2])}">${esc(val)}</textarea>`:`<input id="${q[0]}" type="${esc(q[3])}" value="${esc(val)}" placeholder="${esc(q[2])}">`;
   return `<div class="question" data-field="${esc(q[0])}"><label for="${q[0]}">${q[1]}</label>${control}${q[3]!=="textarea"?`<small>${esc(q[2])}</small>`:""}</div>`;
  }).join("");
  s.questions.forEach(q=>{document.getElementById(q[0]).value=state.answers[q[0]]||"";document.getElementById(q[0]).addEventListener("input",e=>{state.answers[q[0]]=e.target.value;if(aiReviewStages.includes(s.id))state.completed[s.id]=false;feedback();scheduleAiReview(s.id);save();renderStages();updateStats();});});
@@ -1119,14 +1119,61 @@ function portfolioText(){
 }
 */
 function portfolioText(){return stagesForUser(currentUser).map((s,i)=>"["+String(i+1).padStart(2,"0")+"] "+s.title.toUpperCase()+"\n"+s.questions.map(q=>q[1]+":\n"+(state.answers[q[0]]||"(belum diisi)")).join("\n\n")).join("\n\n--------------------------------\n\n");}
+function pdfText(value){
+ return String(value||"").normalize("NFKD").replace(/[\u0300-\u036f]/g,"").replace(/[“”„]/g,'"').replace(/[‘’]/g,"'").replace(/[—–]/g,"-").replace(/…/g,"...").replace(/•/g,"*").replace(/[^\x09\x0A\x0D\x20-\x7E]/g,"");
+}
+function pdfEscape(value){return pdfText(value).replace(/\\/g,"\\\\").replace(/\(/g,"\\(").replace(/\)/g,"\\)");}
+function wrapPdfLine(value,maxChars=92){
+ const words=pdfText(value).split(/\s+/).filter(Boolean), lines=[]; let line="";
+ words.forEach(word=>{
+  if(word.length>maxChars){
+   if(line){lines.push(line);line="";}
+   for(let i=0;i<word.length;i+=maxChars) lines.push(word.slice(i,i+maxChars));
+  }else if(!line) line=word;
+  else if((line+" "+word).length<=maxChars) line+=" "+word;
+  else{lines.push(line);line=word;}
+ });
+ if(line) lines.push(line);
+ return lines.length?lines:[""];
+}
+function portfolioPdfBytes(portfolioState=state,portfolioUser=currentUser){
+ const stagesForPdf=stagesForUser(portfolioUser), done=stagesForPdf.filter(stage=>portfolioState.completed?.[stage.id]).length;
+ const lines=["SCRIPT LAB - PORTFOLIO PENULISAN NASKAH","",`Nama: ${portfolioUser?.name||"Siswa"}`,portfolioUser?.role==="group"?`Anggota kelompok: ${(portfolioUser.members||[]).join(", ")||"Belum dicatat"}`:`Nomor absen: ${portfolioUser?.absence||"-"}`,`Progress: ${Math.round(done/stagesForPdf.length*100)}%`,`Tanggal: ${new Date().toLocaleDateString("id-ID")}`,""];
+ stagesForPdf.forEach((stage,index)=>{
+  lines.push(`${String(index+1).padStart(2,"0")} - ${stage.title.toUpperCase()}`,"");
+  stage.questions.forEach(question=>{lines.push(question[1]); const answer=portfolioState.answers?.[question[0]]||"Belum diisi"; String(answer).split(/\r?\n/).forEach(row=>lines.push(...wrapPdfLine(row))); lines.push("");});
+ });
+ lines.push("PRODUCER CHALLENGE",...wrapPdfLine(portfolioState.challenge?portfolioState.challenge.join(" - "):"Belum dibuat"));
+ const pageWidth=595,pageHeight=842,margin=48,lineHeight=13,firstY=790,lastY=58,perPage=Math.floor((firstY-lastY)/lineHeight),pages=[];
+ for(let i=0;i<lines.length;i+=perPage) pages.push(lines.slice(i,i+perPage));
+ const objects=[]; const addObject=body=>{objects.push(body);return objects.length;};
+ const fontId=addObject("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>");
+ const pageIds=[]; const contentIds=[];
+ pages.forEach(pageLines=>{
+  const commands=["BT","/F1 9.5 Tf",`${margin} ${firstY} Td`,"13 TL"];
+  pageLines.forEach((line,index)=>{if(index) commands.push("T*");commands.push(`(${pdfEscape(line)}) Tj`);});
+  commands.push("ET"); contentIds.push(addObject(`<< /Length ${commands.join("\n").length} >>\nstream\n${commands.join("\n")}\nendstream`)); pageIds.push(addObject(""));
+ });
+ const pagesId=addObject(`<< /Type /Pages /Kids [${pageIds.map(id=>`${id} 0 R`).join(" ")}] /Count ${pageIds.length} >>`);
+ pageIds.forEach((id,index)=>{objects[id-1]=`<< /Type /Page /Parent ${pagesId} 0 R /MediaBox [0 0 ${pageWidth} ${pageHeight}] /Resources << /Font << /F1 ${fontId} 0 R >> >> /Contents ${contentIds[index]} 0 R >>`;});
+ const catalogId=addObject(`<< /Type /Catalog /Pages ${pagesId} 0 R >>`);
+ let pdf="%PDF-1.4\n%\xE2\xE3\xCF\xD3\n", offsets=[0];
+ objects.forEach((body,index)=>{offsets.push(new TextEncoder().encode(pdf).length);pdf+=`${index+1} 0 obj\n${body}\nendobj\n`;});
+ const xrefOffset=new TextEncoder().encode(pdf).length; pdf+=`xref\n0 ${objects.length+1}\n0000000000 65535 f \n`; offsets.slice(1).forEach(offset=>{pdf+=`${String(offset).padStart(10,"0")} 00000 n \n`;}); pdf+=`trailer\n<< /Size ${objects.length+1} /Root ${catalogId} 0 R >>\nstartxref\n${xrefOffset}\n%%EOF`;
+ return new TextEncoder().encode(pdf);
+}
+function downloadPortfolioPdf(portfolioState=state,portfolioUser=currentUser){
+ const blob=new Blob([portfolioPdfBytes(portfolioState,portfolioUser)],{type:"application/pdf"}),url=URL.createObjectURL(blob),link=document.createElement("a");
+ link.href=url; link.download=`portfolio-${pdfText(portfolioUser?.name||"siswa").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"siswa"}.pdf`; document.body.appendChild(link); link.click(); link.remove(); setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
 function portfolioHtml(portfolioState=state,portfolioUser=currentUser){
  const portfolioStages=stagesForUser(portfolioUser);
  const done=portfolioStages.filter(stage=>portfolioState.completed?.[stage.id]).length, percent=Math.round(done/portfolioStages.length*100);
  const answerSections=portfolioStages.map((stage,index)=>`<section class="stage"><div class="stage-title"><span>${String(index+1).padStart(2,"0")}</span><h2>${esc(stage.title)}</h2></div>${stage.questions.map(question=>`<div class="answer"><h3>${esc(question[1])}</h3><p>${esc(portfolioState.answers?.[question[0]]||"Belum diisi").replace(/\n/g,"<br>")}</p></div>`).join("")}</section>`).join("");
  const portfolioIdentity=portfolioUser?.role==="group"?`<div><b>Anggota kelompok</b><span>${esc((portfolioUser.members||[]).join(", ")||"Belum dicatat")}</span></div>`:`<div><b>Nomor absen</b><span>${esc(portfolioUser?.absence||"-")}</span></div>`;
  return `<!doctype html><html lang="id"><head><meta charset="UTF-8"><title>Portfolio - ${esc(portfolioUser?.name||"SCRIPT LAB")}</title><style>
- @page{size:A4;margin:18mm 20mm}*{box-sizing:border-box}body{margin:0;color:#20202a;background:#eeeae3;font:12pt/1.55 "Courier New",Courier,monospace}.sheet{width:210mm;max-width:100%;margin:24px auto;background:#fffdf8;padding:20mm 18mm;box-shadow:0 16px 40px rgba(32,32,42,.14)}.cover{min-height:245mm;display:flex;flex-direction:column;justify-content:space-between;border-bottom:2px solid #20202a;padding-bottom:18mm}.eyebrow{color:#20202a;font-size:10pt;font-weight:bold;letter-spacing:.08em;margin:0 0 18mm}.cover h1{font:700 25pt/1.2 "Courier New",Courier,monospace;margin:0 0 10mm;text-transform:uppercase}.cover h1 em{font-style:normal}.cover p{max-width:150mm;margin:0;text-align:justify}.meta{display:grid;grid-template-columns:repeat(3,1fr);gap:5mm;margin-top:16mm}.meta div{background:#f1eee8;border:1px solid #bdb8ad;padding:4mm;min-height:20mm}.meta b{display:block;font-size:9pt;text-transform:uppercase;letter-spacing:.06em;margin-bottom:2mm}.meta span{display:block;font-size:10pt;overflow-wrap:anywhere}.stage{break-inside:avoid;border-bottom:1px solid #bdb8ad;padding:10mm 0}.stage-title{display:flex;align-items:baseline;gap:8mm;border-bottom:1px solid #20202a;padding-bottom:4mm;margin-bottom:8mm}.stage-title span{font-weight:bold;min-width:12mm}.stage-title h2{font-size:15pt;line-height:1.3;margin:0;text-transform:uppercase}.answer{margin:7mm 0}.answer h3{font-size:10pt;line-height:1.35;margin:0 0 3mm;text-transform:uppercase}.answer p{margin:0;white-space:pre-wrap;text-align:justify;overflow-wrap:anywhere}.challenge{margin-top:10mm;padding:6mm;border:1px solid #20202a;background:#f1eee8}.challenge h2{margin:0 0 3mm;font-size:14pt;text-transform:uppercase}.challenge p{margin:0;white-space:pre-wrap;text-align:justify}.print-actions{position:fixed;top:18px;right:18px;display:flex;gap:8px}.print-actions button{border:1px solid #20202a;border-radius:3px;padding:10px 14px;background:#20202a;color:white;font:700 10pt "Courier New",Courier,monospace;cursor:pointer}.print-actions button:first-child{background:#fffdf8;color:#20202a}@media print{body{background:white}.sheet{width:auto;margin:0;max-width:none;padding:0;box-shadow:none}.print-actions{display:none}.cover{min-height:245mm}}
- </style></head><body><div class="print-actions"><button onclick="window.print()">Simpan sebagai PDF / Cetak</button><button onclick="window.close()">Tutup</button></div><main class="sheet"><section class="cover"><div><p class="eyebrow">SCRIPT LAB / PORTFOLIO PENULISAN NASKAH</p><h1>${esc(portfolioUser?.name||"Siswa")}<br><em>Portfolio</em></h1><p>Dokumentasi proses pengembangan ide menjadi naskah yang siap diproduksi.</p></div><div class="meta">${portfolioIdentity}<div><b>Progress</b><span>${percent}%</span></div><div><b>Tanggal</b><span>${new Date().toLocaleDateString("id-ID")}</span></div></div></section>${answerSections}<div class="challenge"><h2>Producer Challenge</h2><p>${esc(portfolioState.challenge?portfolioState.challenge.join(" • "):"Belum dibuat")}</p></div></main></body></html>`;
+ @page{size:A4;margin:18mm 20mm}*{box-sizing:border-box}body{margin:0;color:#20202a;background:#eeeae3;font:12pt/1.55 "Courier New",Courier,monospace}.sheet{width:210mm;max-width:100%;margin:24px auto;background:#fffdf8;padding:20mm 18mm;box-shadow:0 16px 40px rgba(32,32,42,.14)}.cover{min-height:245mm;display:flex;flex-direction:column;justify-content:space-between;border-bottom:2px solid #20202a;padding-bottom:18mm}.eyebrow{color:#20202a;font-size:10pt;font-weight:bold;letter-spacing:.08em;margin:0 0 18mm}.cover h1{font:700 25pt/1.2 "Courier New",Courier,monospace;margin:0 0 10mm;text-transform:uppercase}.cover h1 em{font-style:normal}.cover p{max-width:150mm;margin:0;text-align:justify}.meta{display:grid;grid-template-columns:repeat(3,1fr);gap:5mm;margin-top:16mm}.meta div{background:#f1eee8;border:1px solid #bdb8ad;padding:4mm;min-height:20mm}.meta b{display:block;font-size:9pt;text-transform:uppercase;letter-spacing:.06em;margin-bottom:2mm}.meta span{display:block;font-size:10pt;overflow-wrap:anywhere}.stage{break-inside:auto;border-bottom:1px solid #bdb8ad;padding:10mm 0}.stage-title{display:flex;align-items:baseline;gap:8mm;border-bottom:1px solid #20202a;padding-bottom:4mm;margin-bottom:8mm}.stage-title span{font-weight:bold;min-width:12mm}.stage-title h2{font-size:15pt;line-height:1.3;margin:0;text-transform:uppercase}.answer{margin:7mm 0;break-inside:avoid}.answer h3{font-size:10pt;line-height:1.35;margin:0 0 3mm;text-transform:uppercase}.answer p{margin:0;white-space:pre-wrap;text-align:justify;overflow-wrap:anywhere}.challenge{margin-top:10mm;padding:6mm;border:1px solid #20202a;background:#f1eee8}.challenge h2{margin:0 0 3mm;font-size:14pt;text-transform:uppercase}.challenge p{margin:0;white-space:pre-wrap;text-align:justify}.print-actions{position:fixed;top:18px;right:18px;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;z-index:5}.print-actions button{border:1px solid #20202a;border-radius:3px;padding:10px 14px;background:#20202a;color:white;font:700 10pt "Courier New",Courier,monospace;cursor:pointer}.print-actions button:first-child{background:#fffdf8;color:#20202a}@media print{body{background:white}.sheet{width:auto;margin:0;max-width:none;padding:0;box-shadow:none}.print-actions{display:none}.cover{min-height:245mm}}
+ </style></head><body><div class="print-actions"><button onclick="window.opener.downloadPortfolioPdf()">Unduh PDF langsung</button><button onclick="window.print()">Cetak / Simpan dari browser</button><button onclick="window.close()">Tutup</button></div><main class="sheet"><section class="cover"><div><p class="eyebrow">SCRIPT LAB / PORTFOLIO PENULISAN NASKAH</p><h1>${esc(portfolioUser?.name||"Siswa")}<br><em>Portfolio</em></h1><p>Dokumentasi proses pengembangan ide menjadi naskah yang siap diproduksi.</p></div><div class="meta">${portfolioIdentity}<div><b>Progress</b><span>${percent}%</span></div><div><b>Tanggal</b><span>${new Date().toLocaleDateString("id-ID")}</span></div></div></section>${answerSections}<div class="challenge"><h2>Producer Challenge</h2><p>${esc(portfolioState.challenge?portfolioState.challenge.join(" • "):"Belum dibuat")}</p></div></main></body></html>`;
 }
 function openPortfolio(){
  const selectedKey=document.getElementById("portfolioStudent")?.value;
@@ -1134,7 +1181,9 @@ function openPortfolio(){
  if(currentUser?.role==="teacher"&&!selectedUser){alert("Pilih siswa atau kelompok terlebih dahulu.");return;}
  const portfolioWindow=window.open("","_blank","width=1000,height=800");
  if(!portfolioWindow){alert("Izinkan pop-up browser untuk membuka portfolio.");return;}
- portfolioWindow.document.open();portfolioWindow.document.write(portfolioHtml(selectedUser.state||defaultState(),selectedUser).replace(/<div class="challenge">[\s\S]*?<\/div><\/main>/,"</main>"));portfolioWindow.document.close();
+ const selectedState=selectedUser.state||defaultState();
+ portfolioWindow.document.open();portfolioWindow.document.write(portfolioHtml(selectedState,selectedUser).replace(/<div class="challenge">[\s\S]*?<\/div><\/main>/,"</main>"));portfolioWindow.document.close();
+ portfolioWindow.downloadPortfolioPdf=()=>downloadPortfolioPdf(selectedState,selectedUser);
 }
 async function deleteStudentData(username){
  if(!username) {alert("Pilih siswa terlebih dahulu.");return;}
